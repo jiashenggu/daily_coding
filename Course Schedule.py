@@ -35,7 +35,7 @@ class Solution:
 
         q = collections.deque([u for u in range(numCourses) if indeg[u] == 0])
         visited = 0
-
+        res = [u for u in range(numCourses) if indeg[u] == 0]
         while q:
             visited += 1
             u = q.popleft()
@@ -43,8 +43,37 @@ class Solution:
                 indeg[v] -= 1
                 if indeg[v] == 0:
                     q.append(v)
+                    res.append(v)
 
         return visited == numCourses
 
+#III
+# maximum heap
+class Solution:
+    def scheduleCourse(self, courses: List[List[int]]) -> int:
+        courses.sort(key = lambda x: x[1])
+        sumTime = 0
+        maxTime = []
+        for cost, deadline in courses:
+            sumTime += cost
+            heapq.heappush(maxTime, -cost)
+            if sumTime>deadline:
+                sumTime += heapq.heappop(maxTime)
+        return len(maxTime)
 
-
+# IV
+# floyd
+class Solution:
+    def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        dp = [ numCourses*[False] for _ in range(numCourses)]
+        for info in prerequisites:
+            dp[info[0]][info[1]]  = True
+        for k in range(numCourses):
+            for i in range(numCourses):
+                for j in range(numCourses):
+                    if dp[i][k] and dp[k][j]:
+                        dp[i][j]=True
+        ans = []
+        for u,v in queries:
+            ans.append(dp[u][v])
+        return ans
