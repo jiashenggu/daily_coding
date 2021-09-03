@@ -107,3 +107,35 @@ class Solution:
             ans=max(di[i]-da[tmp],ans)
             tmp=i
         return ans
+
+# 面试题 17.14. Smallest K LCCI
+# quick sort idea partition
+class Solution:
+    def partition(self, nums, l, r):
+        pivot = nums[r]
+        i = l
+        for j in range(l, r):
+            if nums[j] <= pivot:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+        nums[i], nums[r] = nums[r], nums[i]
+        return i
+
+    def randomized_partition(self, nums, l, r):
+        i = random.randint(l, r)
+        nums[r], nums[i] = nums[i], nums[r]
+        return self.partition(nums, l, r)
+
+    def randomized_selected(self, arr, l, r, k):
+        pos = self.randomized_partition(arr, l, r)
+        num = pos - l + 1
+        if k < num:
+            self.randomized_selected(arr, l, pos - 1, k)
+        elif k > num:
+            self.randomized_selected(arr, pos + 1, r, k - num)
+
+    def smallestK(self, arr: List[int], k: int) -> List[int]:
+        if k == 0:
+            return list()
+        self.randomized_selected(arr, 0, len(arr) - 1, k)
+        return arr[:k]
