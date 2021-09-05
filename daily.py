@@ -27,3 +27,21 @@ class Solution:
 
         res = matrix_pow([[1, 1], [1, 0]], n - 1)
         return res[0][0]
+
+# 5865. First Day Where You Have Been in All the Rooms
+
+class Solution:
+    def firstDayBeenInAllRooms(self, nextVisit: List[int]) -> int:
+        n = len(nextVisit)
+        ans = 0
+        pre = [0] * n
+        m = 10 ** 9 + 7
+        for i, vis in enumerate(nextVisit):
+            if i + 1 >= n:
+                break
+            tmp = (m + 2 + pre[i] - (0 if vis == 0 else pre[vis])) % m
+            ans = (ans + tmp) % m
+            pre[i + 1] = ans
+        return ans % m
+
+
