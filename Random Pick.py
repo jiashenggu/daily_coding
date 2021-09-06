@@ -1,5 +1,5 @@
+# 528. Random Pick with Weight
 class Solution:
-
     def __init__(self, w: List[int]):
         n = len(w)
         s = 0
