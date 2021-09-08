@@ -1,3 +1,32 @@
+# 502. IPO
+class Solution:
+    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        if min(capital)>w:
+            return 0
+        if w>=max(capital):
+            return sum(heapq.nlargest(k, profits))+w
+        projects = []
+        n = len(profits)
+        for i in range(n):
+            projects.append([profits[i], capital[i]])
+        projects.sort(key = lambda x: (x[1]))
+
+        pq = []
+        idx = 0
+        while k:
+            while idx<n and projects[idx][1]<=w:
+                heapq.heappush(pq, -projects[idx][0])
+                idx+=1
+            if pq:
+                w-=pq[0]
+                heapq.heappop(pq)
+            else:
+                break
+            k-=1
+        return w
+
+
+
 # 179. Largest Number
 class Solution(object):
     def largestNumber(self, nums):
