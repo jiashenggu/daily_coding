@@ -117,3 +117,28 @@ print(find([(1, 3000), (2, 5000), (3, 4000), (4, 10000)],
      [(1, 2000), (2, 3000), (3, 4000)], 11000))
 # Sort one of the arrays of length N.
 # Iterate the other array of length M and do a binary search in the first array updating the global maximum. O(N*log(N) + M*log(N))
+
+# codesignal
+
+import bisect
+
+
+def boundedSquareSum(a, b, lower, upper):
+    aa = [x ** 2 for x in a]
+    bb = [x ** 2 for x in b]
+    aa.sort()
+
+    n1, n2 = len(aa), len(bb)
+    ans = 0
+    print(aa)
+    for i in range(n2):
+        if bb[i] > upper:
+            continue
+
+        r = bisect.bisect_right(aa, upper - bb[i])
+        l = bisect.bisect_left(aa, lower - bb[i])
+        print(l, r)
+
+        ans += (r - l)
+    return ans
+
