@@ -1,3 +1,18 @@
+# 253. Meeting Rooms II
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        if not intervals:
+            return 0
+        h = []
+        intervals.sort(key = lambda x: x[0])
+        for i, (s, e) in enumerate(intervals):
+            if h and h[0]<=s:
+                heapq.heappop(h)
+            heapq.heappush(h, e)
+        return len(h)
+
+
+
 # #!/bin/python
 # # -*- coding: utf8 -*-
 # import sys
