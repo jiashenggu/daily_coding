@@ -1,3 +1,20 @@
+# 447. Number of Boomerangs
+class Solution:
+    def numberOfBoomerangs(self, points: List[List[int]]) -> int:
+
+        ans = 0
+        for i, p1 in enumerate(points):
+            m = collections.defaultdict(int)
+            for j, p2 in enumerate(points):
+                if i == j:
+                    continue
+                d = (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1])
+                m[d] += 1
+            for v in m.values():
+                ans += v * (v - 1)
+        return ans
+
+
 #!/bin/python
 # -*- coding: utf8 -*-
 import collections
