@@ -1,3 +1,35 @@
+
+# 剑指 Offer 42. 连续子数组的最大和
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        n = len(nums)
+        dp = [0]*n
+        dp[0]=nums[0]
+        for i in range(1, n):
+            dp[i] = max(nums[i], dp[i-1]+nums[i])
+        return max(dp)
+class Status:
+    def __init__(self, iSum,lSum, rSum, mSum):
+        self.iSum = iSum
+        self.lSum = lSum
+        self.rSum = rSum
+        self.mSum = mSum
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        def pushUp(l, r):
+            iSum = l.iSum + r.iSum
+            lSum = max(l.lSum, l.iSum+r.lSum)
+            rSum = max(r.rSum, r.iSum+l.rSum)
+            mSum = max(l.mSum, r.mSum, l.rSum+r.lSum)
+            return Status(iSum, lSum, rSum, mSum)
+        def get(l, r):
+            if l==r:
+                return Status(nums[l], nums[l], nums[l], nums[l])
+            mid = (l+r)>>1
+            lSub = get(l, mid)
+            rSub = get(mid+1, r)
+            return pushUp(lSub, rSub)
+        return get(0, len(nums)-1).mSum
 # 509. Fibonacci Number
 import numpy as np
 class Solution:
