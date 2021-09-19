@@ -1,3 +1,28 @@
+# 650. 2 Keys Keyboard
+class Solution:
+    def minSteps(self, n: int) -> int:
+        f = [float("inf")]*(1+n)
+        f[0] = 0
+        f[1] = 0
+        for i in range(2, 1+n):
+            j = 1
+            while j*j<=i:
+                if i%j==0:
+                    f[i] = min(f[i], f[j]+i//j, f[i//j]+j)
+                j+=1
+        print(f)
+        return f[n]
+# prime factorization
+class Solution:
+    def minSteps(self, n: int) -> int:
+        ans = 0
+        d = 2
+        while n>1:
+            while n%d==0:
+                ans+=d
+                n//=d
+            d+=1
+        return ans
 # # #!/bin/python
 # # # -*- coding: utf8 -*-
 # # import sys

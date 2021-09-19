@@ -52,7 +52,7 @@ class UnionFind:  # 手写并查集模板
     def __init__(self, n):
         self.parent = [x for x in range(n)]
         self.size = [1 for x in range(n)]
-        self.part = 0  # 不同之处。因为点还没有真正加进来
+        self.part = n  # 不同之处。因为点还没有真正加进来
 
     def Find(self, x: int) -> int:  # 扁平化
         if self.parent[x] != x:
