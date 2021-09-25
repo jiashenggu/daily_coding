@@ -2,7 +2,7 @@ class UnionFind:  # 手写并查集模板
     def __init__(self, n):
         self.parent = [x for x in range(n)]
         self.size = [1 for x in range(n)]
-        self.part = 0  # 不同之处。因为点还没有真正加进来
+        self.part = n  # 不同之处。因为点还没有真正加进来
 
     def Find(self, x: int) -> int:  # 扁平化
         if self.parent[x] != x:
@@ -46,33 +46,6 @@ class Solution:
             res.append(UF.part)
 
         return res
-
-
-class UnionFind:  # 手写并查集模板
-    def __init__(self, n):
-        self.parent = [x for x in range(n)]
-        self.size = [1 for x in range(n)]
-        self.part = n  # 不同之处。因为点还没有真正加进来
-
-    def Find(self, x: int) -> int:  # 扁平化
-        if self.parent[x] != x:
-            self.parent[x] = self.Find(self.parent[x])
-        return self.parent[x]
-
-    def Union(self, x: int, y: int) -> bool:
-        root_x = self.Find(x)
-        root_y = self.Find(y)
-        if root_x == root_y:
-            return False
-        if self.size[root_x] > self.size[root_y]:  # size策略
-            root_x, root_y = root_y, root_x
-        self.parent[root_x] = root_y
-        self.size[root_y] += self.size[root_x]
-        self.part -= 1
-        return True
-
-    def connected(self, x: int, y: int) -> bool:
-        return self.Find(x) == self.Find(y)
 
 
 # 5866. GCD Sort of an Array

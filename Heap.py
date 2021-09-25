@@ -1,3 +1,19 @@
+# 973. K Closest Points to Origin
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        h = []
+        for x, y in points:
+            d = x ** 2 + y ** 2
+            if len(h) == k:
+                if d < -h[0][0]:
+                    heapq.heappop(h)
+                    heapq.heappush(h, (-d, [x, y]))
+            else:
+                heapq.heappush(h, (-d, [x, y]))
+        ans = [p[1] for p in h]
+        return ans
+
+
 # 253. Meeting Rooms II
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:

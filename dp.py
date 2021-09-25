@@ -1,3 +1,49 @@
+# 673. Number of Longest Increasing Subsequence
+class Solution(object):
+    def findNumberOfLIS(self, nums):
+        n = len(nums)
+        cnt = [1]*n
+        length = [1]*n
+
+        for i in range(n):
+            for j in range(i):
+                if nums[i]>nums[j]:
+                    if length[i]<=length[j]:
+                        length[i] = length[j]+1
+                        cnt[i]=cnt[j]
+                    elif length[j]+1==length[i]:
+                        cnt[i]+=cnt[j]
+        target = max(length)
+        # print(target)
+        # print(length)
+        # print(cnt)
+        return sum([c for i, c in enumerate(cnt) if length[i]==target])
+# 72. Edit Distance
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        n, m = len(word1), len(word2)
+
+        if n * m == 0:
+            return n + m
+
+        d = [[0] * (m + 1) for _ in range(n + 1)]
+
+        for i in range(n + 1):
+            d[i][0] = i
+        for j in range(m + 1):
+            d[0][j] = j
+
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                left = d[i][j - 1] + 1
+                down = d[i - 1][j] + 1
+                left_down = d[i - 1][j - 1]
+                if word1[i - 1] != word2[j - 1]:
+                    left_down += 1
+                d[i][j] = min(left, down, left_down)
+        return d[n][m]
+
+
 # 650. 2 Keys Keyboard
 class Solution:
     def minSteps(self, n: int) -> int:
@@ -10,7 +56,29 @@ class Solution:
                 if i%j==0:
                     f[i] = min(f[i], f[j]+i//j, f[i//j]+j)
                 j+=1
-        print(f)
+        print(f)class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        n, m = len(word1), len(word2)
+
+        if n*m == 0:
+            return n+m
+
+        d = [ [0]*(m+1) for _ in range(n+1)]
+
+        for i in range(n+1):
+            d[i][0] = i
+        for j in range(m+1):
+            d[0][j] = j
+
+        for i in range(1, n+1):
+            for j in range(1, m+1):
+                left = d[i][j-1]+1
+                down = d[i-1][j]+1
+                left_down = d[i-1][j-1]
+                if word1[i-1]!=word2[j-1]:
+                    left_down+=1
+                d[i][j] = min(left, down, left_down)
+        return d[n][m]
         return f[n]
 # prime factorization
 class Solution:
