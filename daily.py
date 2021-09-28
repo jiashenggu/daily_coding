@@ -1,4 +1,31 @@
+# 437. Path Sum III
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> int:
+        prefix = collections.defaultdict(int)
+        prefix[0] = 1
+
+        def dfs(root, curr):
+            if not root:
+                return 0
+
+            ret = 0
+            curr += root.val
+            ret += prefix[curr - targetSum]
+            prefix[curr] += 1
+            ret += dfs(root.left, curr)
+            ret += dfs(root.right, curr)
+            prefix[curr] -= 1
+
+            return ret
+
+        return dfs(root, 0)
 # 剑指 Offer 42. 连续子数组的最大和
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
