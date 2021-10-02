@@ -1,3 +1,49 @@
+428. Serialize and Deserialize N-ary Tree
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+
+class Codec:
+    def serialize(self, root: 'Node') -> str:
+        """Encodes a tree to a single string.
+
+        :type root: Node
+        :rtype: str
+        """
+        if not root:
+            return '#'
+        data = ""
+        data += str(root.val) + '-' + str(len(root.children))
+        for child in root.children:
+            data += '-' + self.serialize(child)
+        return data
+
+    def deserialize(self, data: str) -> 'Node':
+        """Decodes your encoded data to tree.
+
+        :type data: str
+        :rtype: Node
+        """
+        if data == '#':
+            return None
+        data = data.split('-')
+        return self.dfs(data)
+
+    def dfs(self, data):
+        root = Node(int(data.pop(0)))
+        root.children = []
+        n = int(data.pop(0))
+        for i in range(n):
+            child = self.dfs(data)
+            root.children.append(child)
+        return root
+
+
 #!/bin/python
 # -*- coding: utf8 -*-
 import sys

@@ -1,3 +1,34 @@
+# MatrixChainOrder
+class Solution:
+    def MatrixChainOrder(self, arr, n) -> int:
+        dp = [n*[0] for _ in range(n)]
+        for i in range(1, n):
+            dp[i][i] = 0
+        for L in range(2, n):
+            for i in range(1, n):
+                j = i+L-1
+                dp[i][j] = float("inf")
+                for k in range(i, j):
+                    dp[i][j] = min(dp[i][j], dp[i][k]+dp[k+1][j]+arr[i-1]*arr[k]*arr[j])
+        return dp[1][n-1]
+
+# 664. Strange Printer
+class Solution:
+    def strangePrinter(self, s: str) -> int:
+        n = len(s)
+        if n == 0:
+            return 0
+        dp = [(n + 1) * [0] for _ in range(n + 1)]
+        for length in range(n):
+            for L in range(n - length):
+                R = L + length
+                dp[L][R] = dp[L + 1][R] + 1
+                for k in range(L + 1, R + 1):
+                    if s[k] == s[L]:
+                        dp[L][R] = min(dp[L][R], dp[L][k - 1] + dp[k + 1][R])
+        return dp[0][n - 1]
+
+
 # 639. Decode Ways II
 class Solution:
     def numDecodings(self, s: str) -> int:
