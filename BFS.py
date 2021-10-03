@@ -1,3 +1,37 @@
+# 1368. Minimum Cost to Make at Least One Valid Path in a Grid
+class Solution:
+    def minCost(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+
+        min_cost = collections.defaultdict(lambda: math.inf, {(0, 0): 0})
+
+        q = collections.deque([(0, 0, 0)])
+
+        def neightbourhood(x, y):
+            if y + 1 < n:
+                yield x, y + 1, int(grid[x][y] != 1)
+            if y - 1 >= 0:
+                yield x, y - 1, int(grid[x][y] != 2)
+            if x + 1 < m:
+                yield x + 1, y, int(grid[x][y] != 3)
+            if x - 1 >= 0:
+                yield x - 1, y, int(grid[x][y] != 4)
+
+        while q:
+            i, j, cost = q.popleft()
+            if i == m - 1 and j == n - 1:
+                return cost
+            for ni, nj, step_cost in neightbourhood(i, j):
+                ncost = cost + step_cost
+                if ncost < min_cost[ni, nj]:
+                    min_cost[ni, nj] = ncost
+                    if step_cost:
+                        q.append((ni, nj, ncost))
+                    else:
+                        q.appendleft((ni, nj, ncost))
+        return 0
+
+
 # 1293. Shortest Path in a Grid with Obstacles Elimination
 # BFS
 class Solution:
