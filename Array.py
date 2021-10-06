@@ -1,3 +1,16 @@
+# 442. Find All Duplicates in an Array
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        ans = []
+        for num in nums:
+            nums[abs(num) - 1] *= -1
+        for num in nums:
+            if nums[abs(num) - 1] > 0:
+                ans.append(abs(num))
+                nums[abs(num) - 1] *= -1
+        return ans
+
+
 # Python3 implementation of the approach
 def getZarr(s, n, Z):
     L, R, k = 0, 0, 0
@@ -20,7 +33,7 @@ def getZarr(s, n, Z):
             '''
             while R < n and s[R - L] == s[R]:
                 R += 1
-            print('L',L,'R',R)
+            print('L', L, 'R', R)
             Z[i] = R - L
             R -= 1
         else:
