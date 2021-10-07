@@ -1,3 +1,35 @@
+# 4. Median of Two Sorted Arrays
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        n1 = len(nums1)
+        n2 = len(nums2)
+        idx_median = (n1 + n2) // 2
+        i1, i2 = 0, 0
+        left, right = 0, 0
+        while i1 < n1 and i2 < n2 and i1 + i2 < idx_median + 1:
+            if nums1[i1] < nums2[i2]:
+                left = right
+                right = nums1[i1]
+                i1 += 1
+            else:
+                left = right
+                right = nums2[i2]
+                i2 += 1
+        # print(left, right)
+        while i1 < n1 and i1 + i2 < idx_median + 1:
+            left = right
+            right = nums1[i1]
+            i1 += 1
+        while i2 < n2 and i1 + i2 < idx_median + 1:
+            left = right
+            right = nums2[i2]
+            i2 += 1
+        if (n1 + n2) % 2 == 0:
+            return (left + right) / 2
+        else:
+            return right
+
+
 # 442. Find All Duplicates in an Array
 class Solution:
     def findDuplicates(self, nums: List[int]) -> List[int]:
