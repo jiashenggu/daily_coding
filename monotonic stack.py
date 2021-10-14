@@ -1,3 +1,20 @@
+# 739. Daily Temperatures
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        n = len(temperatures)
+        q = []
+        ans = []
+        for i in range(n - 1, -1, -1):
+            while q and temperatures[q[-1]] <= temperatures[i]:
+                q.pop(-1)
+            if q:
+                ans.append(q[-1] - i)
+            else:
+                ans.append(0)
+            q.append(i)
+        return ans[::-1]
+
+
 # # # 84. Largest Rectangle in Histogram
 # # class Solution:
 # #     def largestRectangleArea(self, heights: List[int]) -> int:

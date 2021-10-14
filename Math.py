@@ -1,3 +1,22 @@
+# 780. Reaching Points
+class Solution(object):
+    def reachingPoints(self, sx, sy, tx, ty):
+        while tx >= sx and ty >= sy:
+            if tx == ty:
+                break
+            elif tx > ty:
+                if ty > sy:
+                    tx %= ty
+                elif ty==sy:
+                    return (tx - sx) % ty == 0
+            else:
+                if tx > sx:
+                    ty %= tx
+                elif tx==sx:
+                    return (ty - sy) % tx == 0
+
+        return tx == sx and ty == sy
+# 1492. The kth Factor of n
 class Solution:
     def kthFactor(self, n: int, k: int) -> int:
         l, r = [], []
