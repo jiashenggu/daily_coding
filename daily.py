@@ -1,31 +1,37 @@
-# 437. Path Sum III
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-
+# 229. Majority Element II
 class Solution:
-    def pathSum(self, root: TreeNode, targetSum: int) -> int:
-        prefix = collections.defaultdict(int)
-        prefix[0] = 1
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        vote1, vote2 = 0, 0
+        element1, element2 = 0, 0
+        for num in nums:
+            if vote1>0 and num==element1:
+                vote1+=1
+            elif vote2>0 and num==element2:
+                vote2+=1
+            elif vote1==0:
+                element1 = num
+                vote1+=1
+            elif vote2==0:
+                element2 = num
+                vote2+=1
 
-        def dfs(root, curr):
-            if not root:
-                return 0
-
-            ret = 0
-            curr += root.val
-            ret += prefix[curr - targetSum]
-            prefix[curr] += 1
-            ret += dfs(root.left, curr)
-            ret += dfs(root.right, curr)
-            prefix[curr] -= 1
-
-            return ret
-
-        return dfs(root, 0)
+            else:
+                vote1-=1
+                vote2-=1
+        cnt1, cnt2 = 0, 0
+        for num in nums:
+            if vote1>0 and num==element1:
+                cnt1+=1
+            if vote2>0 and  num==element2:
+                cnt2+=1
+        ans = []
+        n = len(nums)
+        # print(element1, element2)
+        if vote1>0 and cnt1>n//3:
+            ans.append(element1)
+        if vote2>0 and cnt2>n//3:
+            ans.append(element2)
+        return ans
 # 剑指 Offer 42. 连续子数组的最大和
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
@@ -35,6 +41,7 @@ class Solution:
         for i in range(1, n):
             dp[i] = max(nums[i], dp[i-1]+nums[i])
         return max(dp)
+
 class Status:
     def __init__(self, iSum,lSum, rSum, mSum):
         self.iSum = iSum
