@@ -1,3 +1,32 @@
+# 2048. Next Greater Numerically Balanced Number
+class Solution:
+    def nextBeautifulNumber(self, n: int) -> int:
+        def backtrack(idx, numLen, curNum, counter):
+            if idx == numLen:
+                isB = True
+                for k, v in counter.items():
+                    if v != 0 and k != v:
+                        isB = False
+                if isB:
+                    yield curNum
+
+            for d in range(1, 10):
+                if counter[d] >= d:
+                    continue
+                if counter[d] + (numLen - idx) < d:
+                    continue
+                counter[d] += 1
+                yield from backtrack(idx + 1, numLen, curNum * 10 + d, counter)
+                counter[d] -= 1
+
+        nn = len(str(n))
+        for numLen in range(nn, nn + 2):
+            nums = backtrack(0, numLen, 0, Counter())
+            for num in nums:
+                if num > n:
+                    return num
+
+
 # 638. Shopping Offers
 from functools import lru_cache
 

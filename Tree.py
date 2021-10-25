@@ -1,3 +1,75 @@
+# cache dfs
+class Solution:
+    def minimumTime(self, n: int, relations: List[List[int]], time: List[int]) -> int:
+        edges = defaultdict(list)
+        for fr, to in relations:
+            edges[fr - 1].append(to - 1)
+
+        @lru_cache(None)
+        def dfs(u):
+            cur = 0
+            for v in edges[u]:
+                cur = max(cur, dfs(v))
+            return cur + time[u]
+
+        ans = 0
+        for i in range(n):
+            ans = max(ans, dfs(i))
+        return ans
+
+
+# topology sort
+class Solution:
+    def minimumTime(self, n: int, relations: List[List[int]], time: List[int]) -> int:
+        graph = defaultdict(list)
+        inDegree = [0] * n
+        for prv, nxt in relations:
+            prv, nxt = prv - 1, nxt - 1  # convert into zero-based index
+            graph[prv].append(nxt)
+            inDegree[nxt] += 1
+
+        q = deque([])
+        dist = [0] * n
+        for u in range(n):
+            if inDegree[u] == 0:
+                q.append(u)
+                dist[u] = time[u]
+
+        while q:
+            u = q.popleft()
+            for v in graph[u]:
+                dist[v] = max(dist[u] + time[v], dist[v])  # Update `dist[v]` using the maximum dist of the predecessor nodes
+                inDegree[v] -= 1
+                if inDegree[v] == 0:
+                    q.append(v)
+        return max(dist)
+# 2049. Count Nodes With the Highest Score
+class Solution:
+    def countHighestScoreNodes(self, parents: List[int]) -> int:
+        self.best = -1
+        self.ans = 0
+        edges = defaultdict(list)
+        for i, parent in enumerate(parents):
+            edges[parent].append(i)
+        n = len(parents)
+        sz = n * [1]
+
+        def dfs(x):
+            cur = 1
+            for i in edges[x]:
+                dfs(i)
+                sz[x] += sz[i]
+                cur *= sz[i]
+            if x:
+                cur *= n - sz[x]
+            if cur > self.best:
+                self.best = cur
+                self.ans = 1
+            elif cur == self.best:
+                self.ans += 1
+
+        dfs(0)
+        return self.ans
 # 222. Count Complete Tree Nodes
 class Solution:
     def compute_depth(self, node: TreeNode) -> int:
