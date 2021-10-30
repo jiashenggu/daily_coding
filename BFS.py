@@ -1,3 +1,44 @@
+# 301. Remove Invalid Parentheses
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        def isValid(x):
+            stk = []
+            for ch in x:
+                if ch not in "()":
+                    continue
+                if ch == '(':
+                    stk.append(ch)
+                elif ch == ')':
+                    if not stk or stk[-1] != '(':
+                        return False
+                    else:
+                        stk.pop()
+            return len(stk) == 0
+
+        ans = []
+        q = collections.deque([s])
+        vis = set()
+        while q:
+            nq = len(q)
+            for _ in range(nq):
+                cur = q.popleft()
+                # print(cur)
+                if isValid(cur):
+                    ans.append(cur)
+                else:
+                    for i in range(len(cur)):
+                        if cur[i] not in "()":
+                            continue
+                        nex = cur[:i] + cur[i + 1:]
+                        if nex in vis:
+                            continue
+                        vis.add(nex)
+                        q.append(nex)
+            if len(ans) > 0:
+                break
+        return ans
+
+
 # 279. Perfect Squares
 class Solution:
     def numSquares(self, n):
