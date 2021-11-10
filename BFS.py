@@ -1,3 +1,31 @@
+488. Zuma Game
+ptn = re.compile(r'(\w)\1{2,}')
+class Solution:
+    def findMinStep(self, board: str, hand: str) -> int:
+        q = deque([(board, hand)])
+        seen = {(board, hand)}
+        ans = 0
+        while q:
+            nq = len(q)
+            for _ in range(nq):
+                board, hand = q.popleft()
+                if not board:
+                    return ans
+                for i in range(len(board)):
+                    for j in range(len(hand)):
+                        new_board = board[:i] + hand[j] + board[i:]
+                        new_hand = hand[:j] + hand[j + 1:]
+                        if (new_board, new_hand) in seen:
+                            continue
+                        seen.add((new_board, new_hand))
+                        cnt = 1
+                        while cnt:
+                            new_board, cnt = ptn.subn('', new_board)
+
+                        q.append((new_board, new_hand))
+
+            ans += 1
+        return -1
 # 407. Trapping Rain Water II
 class Solution:
     def trapRainWater(self, heightMap: List[List[int]]) -> int:
