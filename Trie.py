@@ -1,3 +1,70 @@
+# 677. Map Sum Pairs
+class MapSum:
+
+    def __init__(self):
+        self.trie = {}
+
+    def insert(self, key: str, val: int) -> None:
+        trie = self.trie
+        for ch in key:
+            if ch not in trie:
+                trie[ch] = {}
+            trie = trie[ch]
+        trie["#"] = val
+
+    def suffixSum(self, node):
+        ans = 0
+        for ch in node:
+            if ch=="#":
+                ans+=node[ch]
+            else:
+                ans += self.suffixSum(node[ch])
+        return ans
+    def sum(self, prefix: str) -> int:
+        trie = self.trie
+        for ch in prefix:
+            if ch not in trie:
+                return 0
+            else:
+                trie = trie[ch]
+        return self.suffixSum(trie)
+
+
+
+# Your MapSum object will be instantiated and called as such:
+# obj = MapSum()
+# obj.insert(key,val)
+# param_2 = obj.sum(prefix)
+
+class TrieNode:
+    def __init__(self):
+        self.val = 0
+        self.next = [None for _ in range(26)]
+
+class MapSum:
+    def __init__(self):
+        self.root = TrieNode()
+        self.map = {}
+
+    def insert(self, key: str, val: int) -> None:
+        delta = val
+        if key in self.map:
+            delta -= self.map[key]
+        self.map[key] = val
+        node = self.root
+        for c in key:
+            if node.next[ord(c) - ord('a')] is None:
+                node.next[ord(c) - ord('a')] = TrieNode()
+            node = node.next[ord(c) - ord('a')]
+            node.val += delta
+
+    def sum(self, prefix: str) -> int:
+        node = self.root
+        for c in prefix:
+            if node.next[ord(c) - ord('a')] is None:
+                return 0
+            node = node.next[ord(c) - ord('a')]
+        return node.val
 # 1178. Number of Valid Words for Each Puzzle
 # list trie
 class Solution:
