@@ -1,3 +1,46 @@
+# 1976. Number of Ways to Arrive at Destination
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        mod = 10 ** 9 + 7
+        dist = [[float("inf")] * n for _ in range(n)]
+
+        for i in range(n):
+            dist[i][i] = 0
+        for u, v, t in roads:
+            dist[u][v] = t
+            dist[v][u] = t
+
+        seen = set()
+        for _ in range(n):
+            u = None
+            for i in range(n):
+                if i not in seen and (not u or (dist[0][i] < dist[0][u])):
+                    u = i
+            seen.add(u)
+            for i in range(n):
+                dist[0][i] = min(dist[0][i], dist[0][u] + dist[u][i])
+
+        g = defaultdict(list)
+        for u, v, t in roads:
+            if dist[0][u] - dist[0][v] == t:
+                g[v].append(u)
+            if dist[0][v] - dist[0][u] == t:
+                g[u].append(v)
+
+        @lru_cache(None)
+        def dfs(u):
+            if u == n - 1:
+                return 1
+            ans = 0
+            for v in g[u]:
+                ans += (dfs(v)) % mod
+            return ans % mod
+
+        ans = dfs(0)
+        dfs.cache_clear()
+        return ans
+
+
 # # 133 cloneGraph
 # """
 # # Definition for a Node.
