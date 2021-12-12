@@ -1,3 +1,35 @@
+# 5. Longest Palindromic Substring
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def expandCenter(l, r):
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                l -= 1
+                r += 1
+            return (r - l - 2) // 2
+
+        start, end = 0, -1
+        s = '#' + "#".join(list(s)) + "#"
+        right = -1
+        j = -1
+        arm_len = []
+        for i in range(len(s)):
+            if right >= i:
+                i_sym = j * 2 - i
+                min_arm_len = min(arm_len[i_sym], right - i)
+                cur_arm_len = expandCenter(i - min_arm_len, i + min_arm_len)
+            else:
+                cur_arm_len = expandCenter(i, i)
+            arm_len.append(cur_arm_len)
+            if i + cur_arm_len > right:
+                right = i + cur_arm_len
+                j = i
+            if 2 * cur_arm_len + 1 > end - start:
+                start = i - cur_arm_len
+                end = i + cur_arm_len
+
+        return s[start + 1:end + 1:2]
+
+
 # 458. Poor Pigs
 class Solution:
     def poorPigs(self, buckets: int, minutesToDie: int, minutesToTest: int) -> int:

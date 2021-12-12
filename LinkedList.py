@@ -1,3 +1,44 @@
+# 25. Reverse Nodes in k-Group
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        def reverse(begin, k):
+            pre = None
+            node = begin
+            while node and k:
+                k -= 1
+                tmp = node.next
+                node.next = pre
+                pre = node
+                node = tmp
+            return pre
+
+        node = head
+        ktail = None
+
+        new_head = None
+        while node:
+            node = head
+            cnt = 0
+            while cnt < k and node:
+                cnt += 1
+                node = node.next
+            if cnt == k:
+                begin1 = reverse(head, k)
+                if ktail:
+                    ktail.next = begin1
+                else:
+                    new_head = begin1
+                ktail = head
+                head = node
+        if ktail:
+            ktail.next = head
+        return new_head if new_head else head
+
 # 430. Flatten a Multilevel Doubly Linked List
 """
 # Definition for a Node.
