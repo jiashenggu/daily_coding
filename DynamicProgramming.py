@@ -1,4 +1,5 @@
 # 5. Longest Palindromic Substring
+# Manacher
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         def expandCenter(l, r):
