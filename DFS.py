@@ -1,3 +1,27 @@
+# 785. Is Graph Bipartite?
+# O(N+E), O(N)
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        n = len(graph)
+        colors = n * [-1]
+        self.flag = True
+
+        def dfs(u, color):
+            for v in graph[u]:
+                if colors[v] == -1:
+                    colors[v] = color ^ 1
+                    dfs(v, color ^ 1)
+                elif colors[v] ^ 1 != color:
+                    print(colors)
+                    self.flag = False
+                    return
+
+        for i in range(n):
+            if colors[i] == -1:
+                dfs(i, 0)
+        return self.flag
+
+
 # # #!/bin/python
 # # # -*- coding: utf8 -*-
 # # import sys

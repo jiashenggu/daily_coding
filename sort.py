@@ -1,3 +1,90 @@
+# 973. K Closest Points to Origin
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        return self.quick_select(points, k)
+
+    def quick_select(self, points, k):
+        left, right = 0, len(points) - 1
+        pivot_index = len(points)
+        while pivot_index != k:
+            pivot_index = self.partition(points, left, right)
+            if pivot_index < k:
+                left = pivot_index
+            else:
+                right = pivot_index - 1
+        return points[:k]
+
+    def partition(self, points, left, right):
+        pivot = self.choose_pivot(points, left, right)
+        pivot_dist = self.squared_distance(pivot)
+        # while left<right:
+        #     if self.squared_distance(points[left]) < pivot_dist:
+        #         left+=1
+        #     else:
+        #         points[left], points[right] = points[right], points[left]
+        #         right-=1
+        # if self.squared_distance(points[left])<pivot_dist:
+        #     left+=1
+        # return left
+        i = left
+        for j in range(left, right + 1):
+            if self.squared_distance(points[j]) < pivot_dist:
+                points[i], points[j] = points[j], points[i]
+                i += 1
+        return i
+
+    def choose_pivot(self, points: List[List[int]], left: int, right: int) -> List[int]:
+        """Choose a pivot element of the list"""
+        # return points[left + (right - left) // 2]
+        return points[random.randint(left, right)]
+
+    def squared_distance(self, point):
+        return point[0] ** 2 + point[1] ** 2
+
+
+# 148. Sort List
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        mid = self.getMid(head)
+        left = self.sortList(head)
+        right = self.sortList(mid)
+        return self.merge(left, right)
+
+    def merge(self, l1, l2):
+        dummyHead = ListNode()
+        node = dummyHead
+        while l1 and l2:
+            if l1.val < l2.val:
+                node.next = l1
+                l1 = l1.next
+            else:
+                node.next = l2
+                l2 = l2.next
+            node = node.next
+        if l1:
+            node.next = l1
+
+        if l2:
+            node.next = l2
+
+        return dummyHead.next
+
+    def getMid(self, head):
+        midPrev = None
+        while head and head.next:
+            midPrev = head if not midPrev else midPrev.next
+            head = head.next.next
+        mid = midPrev.next
+        midPrev.next = None
+        return mid
+
 #!/bin/python
 # -*- coding: utf8 -*-
 import sys
