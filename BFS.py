@@ -1,4 +1,54 @@
-488. Zuma Game
+# 1345. Jump Game IV
+class Solution:
+    def minJumps(self, arr: List[int]) -> int:
+
+        tmp = []
+        i = 0
+        while i < len(arr):
+            if i == len(arr) - 1 or arr[i] != arr[i + 1]:
+                tmp.append(arr[i])
+                i += 1
+                continue
+            a = i
+            while i < len(arr) - 1 and arr[i] == arr[i + 1]:
+                i += 1
+            b = i
+            tmp.extend([arr[a], arr[b]])
+            i += 1
+
+        arr = tmp
+        n = len(arr)
+        # print(arr)
+        m = defaultdict(list)
+        vis = n * [0]
+        for i in range(n):
+            m[arr[i]].append(i)
+
+        ans = 0
+        q = deque([0])
+        vis[0] = 1
+        while q:
+            nq = len(q)
+            # print(q)
+            for _ in range(nq):
+                u = q.popleft()
+                if u == n - 1:
+                    return ans
+                for v in reversed(m[arr[u]]):
+                    if u != v and not vis[v]:
+                        vis[v] = 1
+                        q.append(v)
+                m[arr[u]].clear()
+                if u - 1 >= 0 and not vis[u - 1]:
+                    vis[u - 1] = 1
+                    q.append(u - 1)
+                if u + 1 < n and not vis[u + 1]:
+                    vis[u + 1] = 1
+                    q.append(u + 1)
+            ans += 1
+        return
+
+    # 488. Zuma Game
 ptn = re.compile(r'(\w)\1{2,}')
 class Solution:
     def findMinStep(self, board: str, hand: str) -> int:
