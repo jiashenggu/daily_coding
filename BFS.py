@@ -1,4 +1,29 @@
-# 1345. Jump Game IV
+# 1654. Minimum Jumps to Reach Home
+class Solution:
+    def minimumJumps(self, forbidden: List[int], a: int, b: int, x: int) -> int:
+        forbidden = set(forbidden)
+        # each node in the queue is (position, jumped backward last time, number of steps)
+        queue = collections.deque([(0, False, 0)])
+        # Notice it is important to keep the False in seen not just the position
+        seen = set([0, False])
+        upper_bound = 6000
+
+        def valid_position(pos, back):
+            return 0 <= pos <= upper_bound and (pos, back) not in seen and pos not in forbidden
+
+        while queue:
+            for _ in range(len(queue)):
+                pos, back, steps = queue.pop()
+                if pos == x:
+                    return steps
+                if valid_position(pos + a, False):
+                    seen.add((pos + a, back))
+                    queue.appendleft((pos + a, False, steps + 1))
+                if not back and valid_position(pos - b, True):
+                    seen.add((pos - b, True))
+                    queue.appendleft((pos - b, True, steps + 1))
+        return -1
+    # 1345. Jump Game IV
 class Solution:
     def minJumps(self, arr: List[int]) -> int:
 
