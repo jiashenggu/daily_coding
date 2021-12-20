@@ -1,3 +1,25 @@
+# 2111. Minimum Operations to Make the Array K-Increasing
+class Solution:
+    def longestNonDecreasingSubsequence(self, arr):
+        sub = []
+        for i, x in enumerate(arr):
+            if len(sub) == 0 or sub[-1] <= x:  # Append to LIS if new element is >= last element in LIS
+                sub.append(x)
+            else:
+                idx = bisect_right(sub, x)  # Find the index of the smallest number > x
+                sub[idx] = x  # Replace that number with x
+        return len(sub)
+
+    def kIncreasing(self, arr: List[int], k: int) -> int:
+        n = len(arr)
+        ans = 0
+        for i in range(k):
+            newArr = []
+            for j in range(i, n, k):
+                newArr.append(arr[j])
+            ans += len(newArr) - self.longestNonDecreasingSubsequence(newArr)
+        return ans
+
 # 33. Search in Rotated Sorted Array
 # O(log(n)), O(1)
 class Solution:
