@@ -1,3 +1,22 @@
+# 469. Convex Polygon
+class Solution:
+    def isConvex(self, points: List[List[int]]) -> bool:
+        n = len(points)
+        pre = 0
+        for i in range(n):
+            x1 = points[(i+1)%n][0] - points[i][0]
+            y1 = points[(i+1)%n][1] - points[i][1]
+
+            x2 = points[(i+2)%n][0] - points[(i+1)%n][0]
+            y2 = points[(i+2)%n][1] - points[(i+1)%n][1]
+
+            tmp = x1*y2 - x2*y1
+            if tmp:
+                if tmp*pre<0:
+                    return False
+                pre = tmp
+        return True
+
 # 780. Reaching Points
 class Solution(object):
     def reachingPoints(self, sx, sy, tx, ty):

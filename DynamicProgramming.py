@@ -1,3 +1,27 @@
+# 10. Regular Expression Matching
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+        dp = [(n + 1) * [False] for _ in range(m + 1)]
+        dp[0][0] = True
+
+        def match(i, j):
+            if i == 0:
+                return False
+            if p[j - 1] == '.':
+                return True
+            return s[i - 1] == p[j - 1]
+
+        for i in range(m + 1):
+            for j in range(1, n + 1):
+                if p[j - 1] == '*':
+                    dp[i][j] |= dp[i][j - 2]
+                    if match(i, j - 1):
+                        dp[i][j] |= dp[i - 1][j]
+                if match(i, j):
+                    dp[i][j] |= dp[i - 1][j - 1]
+        return dp[m][n]
+
 # 1857. Largest Color Value in a Directed Graph
 class Solution:
     class CycleException(Exception):

@@ -1,3 +1,43 @@
+# 1923. Longest Common Subpath
+class RabinKarp:
+    def __init__(self, s):
+        self.mod = 10 ** 18
+        self.pow = [1]
+        self.roll = [0]
+
+        p = 10 ** 9 + 7
+        for x in s:
+            self.pow.append(self.pow[-1] * p % self.mod)
+            self.roll.append((self.roll[-1] * p + x) % self.mod)
+
+    def query(self, i, j):
+        return (self.roll[j] - self.roll[i] * self.pow[j - i]) % self.mod
+
+
+class Solution:
+    def longestCommonSubpath(self, n: int, paths: List[List[int]]) -> int:
+        rks = [RabinKarp(path) for path in paths]
+
+        def fn(x):
+            seen = set()
+            for rk, path in zip(rks, paths):
+                vals = {rk.query(i, i + x) for i in range(len(path) - x + 1)}
+                if not seen:
+                    seen = vals
+                seen &= vals
+                if not seen:
+                    return False
+            return True
+
+        lo, hi = 0, len(paths[0])
+        while lo < hi:
+            mid = (lo + hi + 1) // 2
+            if fn(mid):
+                lo = mid
+            else:
+                hi = mid - 1
+        return lo
+
 
 # 1153. String Transforms Into Another String
 class Solution:
