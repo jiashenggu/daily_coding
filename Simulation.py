@@ -1,3 +1,53 @@
+# 592. Fraction Addition and Subtraction
+class Solution:
+    def fractionAddition(self, expression: str) -> str:
+
+        sign = 1
+        flag = True
+
+        pre_numerator = float("inf")
+        pre_denominator = float("inf")
+        if expression[0].isdigit():
+            expression = '+' + expression
+        n = len(expression)
+        i = 0
+        numerator = 0
+        denominator = 0
+        while i <= n:
+            if i < n:
+                c = expression[i]
+            else:
+                c = '#'
+            if c.isdigit():
+                if flag:
+                    numerator = numerator * 10 + int(c)
+                else:
+                    denominator = denominator * 10 + int(c)
+            elif i == n or c in "+-":
+                flag = True
+                if c == '+':
+                    sign = 1
+                elif c == '-':
+                    sign = -1
+                if pre_numerator != float("inf") and pre_denominator != float("inf"):
+                    g = gcd(pre_denominator, denominator)
+                    pre_numerator = pre_numerator * denominator // g + pre_denominator * numerator // g
+                    pre_denominator = pre_denominator * denominator // g
+                    g = gcd(pre_numerator, pre_denominator)
+                    pre_numerator //= g
+                    pre_denominator //= g
+                elif numerator or denominator:
+                    pre_numerator = numerator
+                    pre_denominator = denominator
+                numerator = 0
+                denominator = 0
+            elif c == '/':
+                flag = False
+                numerator *= sign
+            i += 1
+        return str(pre_numerator) + '/' + str(pre_denominator)
+
+
 # 43. Multiply Strings
 class Solution:
     def multiply(self, num1: str, num2: str) -> str:

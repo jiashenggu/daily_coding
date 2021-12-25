@@ -1,3 +1,33 @@
+# 295. Find Median from Data Stream
+class MedianFinder:
+    def __init__(self):
+        self.l = []
+        self.r = []
+
+    def addNum(self, num: int) -> None:
+        l = self.l
+        r = self.r
+        if not l or num<-l[0]:
+            heapq.heappush(l, -num)
+            while len(l)>len(r)+1:
+                heapq.heappush(r, -heapq.heappop(l))
+        else:
+            heapq.heappush(r, num)
+            while len(l)<len(r):
+                heapq.heappush(l, -heapq.heappop(r))
+    def findMedian(self) -> float:
+        l = self.l
+        r = self.r
+        if len(l)>len(r):
+            return -l[0]
+        return (-l[0]+r[0])/2
+
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
 # 786. K-th Smallest Prime Fraction
 class Frac:
     def __init__(self, idx: int, idy: int, x: int, y: int) -> None:
