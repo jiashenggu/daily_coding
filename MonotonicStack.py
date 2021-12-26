@@ -1,3 +1,21 @@
+# 918. Maximum Sum Circular Subarray
+class Solution:
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        n = len(nums)
+        p = [0]
+        for i in range(2 * n):
+            p.append(p[-1] + nums[i % n])
+
+        d = deque([0])
+        ans = nums[0]
+        for i in range(1, 2 * n):
+            if i - d[0] > n:
+                d.popleft()
+            ans = max(ans, p[i] - p[d[0]])
+            while d and p[i] <= p[d[-1]]:
+                d.pop()
+            d.append(i)
+        return ans
 # 739. Daily Temperatures
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
