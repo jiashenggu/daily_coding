@@ -1,3 +1,26 @@
+# 440. K-th Smallest in Lexicographical Order
+class Solution:
+    def count(self, c, n):
+        c1 = c
+        c2 = c+1
+        steps = 0
+        while c1<=n:
+            steps+=min(c2, n+1)-c1
+            c1*=10
+            c2*=10
+        return steps
+    def findKthNumber(self, n: int, k: int) -> int:
+        k-=1
+        cur = 1
+        while k>0:
+            cnt = self.count(cur, n)
+            if cnt<=k:
+                k-=cnt
+                cur+=1
+            else:
+                k-=1
+                cur*=10
+        return cur
 # 297. Serialize and Deserialize Binary Tree
 # Definition for a binary tree node.
 # class TreeNode(object):

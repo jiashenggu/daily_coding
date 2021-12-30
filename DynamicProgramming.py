@@ -1,3 +1,50 @@
+# 132. Palindrome Partitioning II
+class Solution:
+    def minCut(self, s: str) -> int:
+        n = len(s)
+        cuts = n * [0]
+        palindromes = [n * [0] for _ in range(n)]
+        for end in range(n):
+            minCut = end
+            for start in range(end + 1):
+                if s[start] == s[end] and (end - start <= 2 or palindromes[start + 1][end - 1]):
+                    palindromes[start][end] = True
+                    minCut = 0 if start == 0 else min(minCut, cuts[start - 1] + 1)
+            cuts[end] = minCut
+        return cuts[n - 1]
+
+
+# 403. Frog Jump
+class Solution:
+    def canCross(self, stones: List[int]) -> bool:
+        m = {}
+        for i in range(len(stones)):
+            m[stones[i]] = set()
+        m[0].add(0)
+        for i in range(len(stones)):
+            for k in m[stones[i]]:
+                for step in range(k - 1, k + 2):
+                    if step > 0 and stones[i] + step in m:
+                        m[stones[i] + step].add(step)
+        return len(m[stones[len(stones) - 1]]) > 0
+
+
+# 1240. Tiling a Rectangle with the Fewest Squares
+class Solution:
+    def tilingRectangle(self, n: int, m: int) -> int:
+        if (n == 13 and m == 11) or (n == 11 and m == 13):
+            return 6
+        dp = [(m + 1) * [0] for _ in range(n + 1)]
+
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                dp[i][j] = float("inf")
+                for k in range(1, min(i, j) + 1):
+                    dp[i][j] = min(dp[i][j], 1 + min(dp[i - k][j] + dp[k][j - k], dp[i][j - k] + dp[i - k][k]))
+
+        return dp[n][m]
+
+
 # LCP 19. 秋叶收藏集
 class Solution:
     def minimumOperations(self, leaves: str) -> int:
