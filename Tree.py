@@ -1,3 +1,4 @@
+
 # 440. K-th Smallest in Lexicographical Order
 class Solution:
     def count(self, c, n):
