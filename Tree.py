@@ -1,3 +1,20 @@
+# 987. Vertical Order Traversal of a Binary Tree
+class Solution:
+    def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:
+        q = deque([(root, 0, 0)])
+        nodes = []
+        while q:
+            cur, row, col = q.popleft()
+            nodes.append((col, row, cur.val))
+            if cur.left:
+                q.append((cur.left, row+1, col-1))
+            if cur.right:
+                q.append((cur.right, row+1, col+1))
+        nodes.sort()
+        ans = defaultdict(list)
+        for col, row, val in nodes:
+            ans[col].append(val)
+        return list(ans.values())
 
 # 440. K-th Smallest in Lexicographical Order
 class Solution:

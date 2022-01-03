@@ -1,3 +1,57 @@
+# 827. Making A Large Island
+class UnionFind:
+    def __init__(self, nn):
+        self.parent = [i for i in range(nn)]
+        self.size = [1] * nn
+        self.maxsize = 1
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y):
+        rx = self.find(x)
+        ry = self.find(y)
+        if rx == ry:
+            return False
+        if self.size[rx] < self.size[ry]:
+            rx, ry = ry, rx
+        self.size[rx] += self.size[ry]
+        if self.size[rx] > self.maxsize:
+            self.maxsize = self.size[rx]
+        self.parent[ry] = rx
+        return True
+
+
+class Solution:
+    def largestIsland(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        uf = UnionFind(n * n)
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    for ni, nj in [(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)]:
+                        if 0 <= ni < n and 0 <= nj < n and grid[ni][nj] == 1:
+                            uf.union(i * n + j, ni * n + nj)
+        ans = 0
+
+        for i in range(n):
+            for j in range(n):
+                tmp = 1
+                if grid[i][j] == 0:
+                    vis = set()
+                    for ni, nj in [(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)]:
+                        if 0 <= ni < n and 0 <= nj < n and grid[ni][nj] == 1:
+                            r = uf.find(ni * n + nj)
+                            if r in vis:
+                                continue
+                            vis.add(r)
+                            tmp += uf.size[r]
+                    ans = max(tmp, ans)
+        return max(uf.maxsize, ans)
+
+
 # 952. Largest Component Size by Common Factor
 class Solution:
     """ slower than the enumeration of all factors ?!
