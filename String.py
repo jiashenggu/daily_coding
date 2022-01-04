@@ -1,3 +1,19 @@
+# 1153. String Transforms Into Another String
+class Solution:
+    def canConvert(self, str1: str, str2: str) -> bool:
+        if str1==str2:
+            return True
+        uni = set()
+        conversion = dict()
+        for l1, l2 in zip(str1, str2):
+            if l1 not in conversion:
+                conversion[l1] = l2
+                uni.add(l2)
+            elif conversion[l1]!=l2:
+                return False
+        if len(uni)<26:
+            return True
+        return False
 # 408. Valid Word Abbreviation
 class Solution:
     def validWordAbbreviation(self, word: str, abbr: str) -> bool:

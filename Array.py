@@ -1,3 +1,23 @@
+# 636. Exclusive Time of Functions
+class Solution:
+    def exclusiveTime(self, n: int, logs: List[str]) -> List[int]:
+        ans = n * [0]
+        stk = []
+        for log in logs:
+            ID, se, timestamp = log.split(":")
+            ID = int(ID)
+            timestamp = int(timestamp)
+            if se == 'start':
+                stk.append([ID, timestamp, 0])
+            elif se == 'end':
+                preID, pretimestamp, dis = stk.pop()
+                ans[preID] += timestamp - pretimestamp + 1 - dis
+                if stk:
+                    stk[-1][2] += timestamp - pretimestamp + 1
+            # print(stk, ans)
+        return ans
+
+
 # 41. First Missing Positive
 class Solution:
     def firstMissingPositive(self, nums: List[int]) -> int:

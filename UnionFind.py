@@ -1,3 +1,49 @@
+# 721. Accounts Merge
+class UnionFind:
+    def __init__(self):
+        self.parent = {}
+        self.size = defaultdict(lambda: 1)
+
+    def add(self, email):
+        if email not in self.parent:
+            self.parent[email] = email
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False
+        if self.size[rx] < self.size[ry]:
+            rx, ry = ry, rx
+        self.size[rx] += self.size[ry]
+        self.parent[ry] = rx
+        return True
+
+
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        uf = UnionFind()
+        emailToName = {}
+        for account in accounts:
+            for i in range(1, len(account)):
+                emailToName[account[i]] = account[0]
+                uf.add(account[i])
+                if i > 1:
+                    uf.union(account[i - 1], account[i])
+        ans = []
+        tmp = defaultdict(list)
+        for email in uf.parent:
+            tmp[uf.find(email)].append(email)
+        for k in tmp:
+            tmp[k].sort()
+            ans.append([emailToName[k]] + tmp[k])
+        return ans
+
+
 # 827. Making A Large Island
 class UnionFind:
     def __init__(self, nn):

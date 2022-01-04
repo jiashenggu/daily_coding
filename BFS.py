@@ -1,3 +1,36 @@
+# 317. Shortest Distance from All Buildings
+class Solution:
+    def shortestDistance(self, grid: List[List[int]]) -> int:
+        def bfs(i, j):
+            nonlocal ans
+            ans = float("inf")
+            q = deque([(i, j)])
+            step = 0
+            while q:
+                step += 1
+                nq = len(q)
+                for _ in range(nq):
+                    r, c = q.popleft()
+                    for nr, nc in [[r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1]]:
+                        if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == vis:
+                            total[nr][nc] += step
+                            grid[nr][nc] -= 1
+                            q.append((nr, nc))
+                            ans = min(ans, total[nr][nc])
+
+        ans = float("inf")
+        vis = 0
+        m, n = len(grid), len(grid[0])
+        total = [n * [0] for _ in range(m)]
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    bfs(i, j)
+                    vis -= 1
+        # print(ans)
+        return ans if ans != float("inf") else -1
+
+
 # 339. Nested List Weight Sum
 class Solution:
     def depthSum(self, nestedList: List[NestedInteger]) -> int:
@@ -71,7 +104,7 @@ class Solution:
                     seen.add((pos - b, True))
                     queue.appendleft((pos - b, True, steps + 1))
         return -1
-    # 1345. Jump Game IV
+# 1345. Jump Game IV
 class Solution:
     def minJumps(self, arr: List[int]) -> int:
 
@@ -121,7 +154,7 @@ class Solution:
             ans += 1
         return
 
-    # 488. Zuma Game
+# 488. Zuma Game
 ptn = re.compile(r'(\w)\1{2,}')
 class Solution:
     def findMinStep(self, board: str, hand: str) -> int:

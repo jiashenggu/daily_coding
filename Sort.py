@@ -1,4 +1,89 @@
+# 347. Top K Frequent Elements
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        if k == len(nums):
+            return nums
+        c = Counter(nums)
+        unique = list(c.keys())
+        n = len(unique)
+
+        def partition(l, r):
+            pivot = random.randint(l, r)
+            pivotF = c[unique[pivot]]
+            unique[r], unique[pivot] = unique[pivot], unique[r]
+
+            i = l
+            for j in range(l, r):
+                if c[unique[j]] < pivotF:
+                    unique[i], unique[j] = unique[j], unique[i]
+                    i += 1
+            unique[r], unique[i] = unique[i], unique[r]
+            return i
+
+        def quick(l, r, k):
+            if l == r:
+                return
+            pos = partition(l, r)
+            if k == pos:
+                return
+            elif k > pos:
+                quick(pos + 1, r, k)
+            else:
+                quick(l, pos - 1, k)
+
+        quick(0, n - 1, n - k)
+        return unique[n - k:]
+
+
 # 973. K Closest Points to Origin
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        return self.quick_select(points, k)
+
+    def quick_select(self, points: List[List[int]], k: int) -> List[List[int]]:
+        """Perform the QuickSelect algorithm on the list"""
+        left, right = 0, len(points) - 1
+        pivot_index = len(points)
+        while pivot_index != k:
+            # Repeatedly partition the list
+            # while narrowing in on the kth element
+            pivot_index = self.partition(points, left, right)
+            if pivot_index < k:
+                left = pivot_index
+            else:
+                right = pivot_index - 1
+
+        # Return the first k elements of the partially sorted list
+        return points[:k]
+
+    def partition(self, points: List[List[int]], left: int, right: int) -> int:
+        """Partition the list around the pivot value"""
+        pivot = self.choose_pivot(points, left, right)
+        pivot_dist = self.squared_distance(pivot)
+        while left < right:
+            # Iterate through the range and swap elements to make sure
+            # that all points closer than the pivot are to the left
+            if self.squared_distance(points[left]) >= pivot_dist:
+                points[left], points[right] = points[right], points[left]
+                right -= 1
+            else:
+                left += 1
+
+        # Ensure the left pointer is just past the end of
+        # the left range then return it as the new pivotIndex
+        if self.squared_distance(points[left]) < pivot_dist:
+            left += 1
+        return left
+
+    def choose_pivot(self, points: List[List[int]], left: int, right: int) -> List[int]:
+        """Choose a pivot element of the list"""
+        return points[left + (right - left) // 2]
+
+    def squared_distance(self, point: List[int]) -> int:
+        """Calculate and return the squared Euclidean distance."""
+        return point[0] ** 2 + point[1] ** 2
+
+# different quick_select,  use while pivot_index!=k
 class Solution:
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
         return self.quick_select(points, k)
@@ -17,15 +102,6 @@ class Solution:
     def partition(self, points, left, right):
         pivot = self.choose_pivot(points, left, right)
         pivot_dist = self.squared_distance(pivot)
-        # while left<right:
-        #     if self.squared_distance(points[left]) < pivot_dist:
-        #         left+=1
-        #     else:
-        #         points[left], points[right] = points[right], points[left]
-        #         right-=1
-        # if self.squared_distance(points[left])<pivot_dist:
-        #     left+=1
-        # return left
         i = left
         for j in range(left, right + 1):
             if self.squared_distance(points[j]) < pivot_dist:
@@ -40,7 +116,6 @@ class Solution:
 
     def squared_distance(self, point):
         return point[0] ** 2 + point[1] ** 2
-
 
 # 148. Sort List
 # Definition for singly-linked list.
@@ -255,32 +330,28 @@ print('[{}]'.format(','.join(str(num) for num in res)))
 #
 # # 面试题 17.14. Smallest K LCCI
 # # quick sort idea partition
-# class Solution:
-#     def partition(self, nums, l, r):
-#         pivot = nums[r]
-#         i = l
-#         for j in range(l, r):
-#             if nums[j] <= pivot:
-#                 nums[i], nums[j] = nums[j], nums[i]
-#                 i += 1
-#         nums[i], nums[r] = nums[r], nums[i]
-#         return i
-#
-#     def randomized_partition(self, nums, l, r):
-#         i = random.randint(l, r)
-#         nums[r], nums[i] = nums[i], nums[r]
-#         return self.partition(nums, l, r)
-#
-#     def randomized_selected(self, arr, l, r, k):
-#         pos = self.randomized_partition(arr, l, r)
-#         num = pos - l + 1
-#         if k < num:
-#             self.randomized_selected(arr, l, pos - 1, k)
-#         elif k > num:
-#             self.randomized_selected(arr, pos + 1, r, k - num)
-#
-#     def smallestK(self, arr: List[int], k: int) -> List[int]:
-#         if k == 0:
-#             return list()
-#         self.randomized_selected(arr, 0, len(arr) - 1, k)
-#         return arr[:k]
+class Solution:
+    def partition(self, nums, l, r):
+        pivot = random.randint(l, r)
+        nums[r], nums[pivot] = nums[pivot], nums[r]
+
+        i = l
+        for j in range(l, r):
+            if nums[j] <= nums[r]:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+        nums[i], nums[r] = nums[r], nums[i]
+        return i
+
+    def randomized_selected(self, arr, l, r, k):
+        pos = self.partition(arr, l, r)
+        if k < pos:
+            self.randomized_selected(arr, l, pos - 1, k)
+        elif k > pos:
+            self.randomized_selected(arr, pos + 1, r, k)
+
+    def smallestK(self, arr: List[int], k: int) -> List[int]:
+        if k == 0:
+            return list()
+        self.randomized_selected(arr, 0, len(arr) - 1, k)
+        return arr[:k]
