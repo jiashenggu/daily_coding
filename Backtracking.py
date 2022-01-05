@@ -1,3 +1,41 @@
+# 282. Expression Add Operators
+class Solution:
+    def addOperators(self, num: str, target: int) -> List[str]:
+        N = len(num)
+        ans = []
+
+        def recurse(index, pre, cur, val, s):
+            if index == N:
+                if val == target and cur == 0:
+                    ans.append("".join(s[1:]))
+                return
+            cur = cur * 10 + int(num[index])
+            str_op = str(cur)
+
+            if cur > 0:
+                recurse(index + 1, pre, cur, val, s)
+            s.append('+')
+            s.append(str_op)
+            recurse(index + 1, cur, 0, val + cur, s)
+            s.pop()
+            s.pop()
+
+            if s:
+                s.append('-')
+                s.append(str_op)
+                recurse(index + 1, -cur, 0, val - cur, s)
+                s.pop()
+                s.pop()
+
+                s.append('*')
+                s.append(str_op)
+                recurse(index + 1, cur * pre, 0, val - pre + pre * cur, s)
+                s.pop()
+                s.pop()
+
+        recurse(0, 0, 0, 0, [])
+        return ans
+
 # 1286. Iterator for Combination
 class CombinationIterator:
     def __init__(self, characters: str, combinationLength: int):

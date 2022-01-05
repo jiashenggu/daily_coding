@@ -1,3 +1,37 @@
+# 227. Basic Calculator II
+class Solution:
+    def calculate(self, s: str) -> int:
+        n = len(s)
+        if n == 0:
+            return 0
+        stk = []
+        cur = 0
+        sign = '+'
+        for i in range(n):
+            c = s[i]
+            if c.isdigit():
+                cur = cur * 10 + int(c)
+            if c in "+-*/" or i == n - 1:
+                if sign == '-':
+                    stk.append(-cur)
+                elif sign == '+':
+                    stk.append(cur)
+                elif sign == "*":
+                    stk.append(stk.pop() * cur)
+                elif sign == '/':
+                    if stk[-1] > 0:
+                        stk.append(stk.pop() // cur)
+                    else:
+                        stk.append(-(-stk.pop() // cur))
+                sign = c
+                cur = 0
+        res = 0
+        # print(stk)
+        for num in stk:
+            res += num
+        return res
+
+
 # 1153. String Transforms Into Another String
 class Solution:
     def canConvert(self, str1: str, str2: str) -> bool:
