@@ -1,3 +1,36 @@
+# 140. Word Break II
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        self.trie = {}
+        for word in wordDict:
+            node = self.trie
+            for ch in word:
+                if ch not in node:
+                    node[ch] = {}
+                node = node[ch]
+            node["#"] = word
+        n = len(s)
+        self.ans = []
+
+        def dfs(index, trie, words):
+            if index == n:
+                length = sum([len(word) for word in words])
+                tmp = " ".join(words)
+                if length == n:
+                    self.ans.append(tmp)
+                return
+            if s[index] in trie:
+                node = trie[s[index]]
+            else:
+                return
+            if "#" in node:
+                dfs(index + 1, self.trie, words + [node["#"]])
+            dfs(index + 1, node, words)
+
+        dfs(0, self.trie, [])
+        return self.ans
+
+
 # 282. Expression Add Operators
 class Solution:
     def addOperators(self, num: str, target: int) -> List[str]:

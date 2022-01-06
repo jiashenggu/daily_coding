@@ -1,3 +1,22 @@
+# 210. Course Schedule II
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        ind = numCourses*[0]
+        graph = defaultdict(list)
+        for v, u in prerequisites:
+            graph[u].append(v)
+            ind[v]+=1
+        q = deque([i for i in range(numCourses) if ind[i]==0])
+        ans = list(q)
+        while q:
+            # print(ind, q)
+            u = q.popleft()
+            for v in graph[u]:
+                ind[v]-=1
+                if ind[v]==0:
+                    ans.append(v)
+                    q.append(v)
+        return ans if len(ans)==numCourses else []
 # 1976. Number of Ways to Arrive at Destination
 class Solution:
     def countPaths(self, n: int, roads: List[List[int]]) -> int:
