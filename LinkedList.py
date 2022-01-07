@@ -1,3 +1,32 @@
+# 138. Copy List with Random Pointer
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+
+class Solution:
+    def __init__(self):
+        self.vis = {}
+
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return head
+        if head in self.vis:
+            return self.vis[head]
+        # print(head.val)
+        ret = Node(head.val)
+        self.vis[head] = ret
+        ret.next = self.copyRandomList(head.next)
+        ret.random = self.copyRandomList(head.random)
+
+        return ret
+
+
 # 23. Merge k Sorted Lists
 # Definition for singly-linked list.
 # class ListNode:
