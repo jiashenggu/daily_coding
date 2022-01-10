@@ -1,3 +1,63 @@
+# Tiktok
+# Input Dictionary:
+# 1: ['a', 'b', 'c']
+# 2: ['b', 'd']
+# 3: ['a', 'e']
+# key can be any integer
+# values would be a list
+# <Integer, List<Character>> map
+# Input Query:
+# //and, or, not, 3 operators
+# "and(not(a), or(b,c))"
+# "a" -> [1, 3]
+# "not(a)"‍‌‌‌‌‍‌‌‍‍‌‍‍‌‌‌‌‍‌‌ -> [2]
+# "or(b,c)" -> [1,2]
+# "and(not(a), or(b,c))" -> [2]
+# Output:
+# [2]
+from collections import deque, defaultdict
+dictionary = {1: set(['a', 'b', 'c']), 2: set(['b', 'd']), 3: set(['a', 'e'])}
+query = "and(not(a), or(b,c))"
+
+
+class Solution:
+    def quer2res(self, dictionary, query):
+        q = deque(query.replace(" ", "").replace(",", " ").replace("(", " ").replace(")", " ").split())
+        char2val, notchar2val = self.process_dict(dictionary)
+        def dfs():
+            token = q.popleft()
+            print(token)
+            if token == "and":
+                return dfs() & dfs()
+            elif token == "or":
+                return dfs() | dfs()
+            elif token == "not":
+                char = q.popleft()
+                return notchar2val[char]
+            else:
+                return char2val[token]
+        return dfs()
+
+
+def process_dict(self, dictionary):
+    char2val, notchar2val = defaultdict(set), defaultdict(set)
+
+    chars = set()
+    for key, vals in dictionary.items():
+        for val in vals:
+            chars.add(val)
+    for char in chars:
+        for key, vals in dictionary.items():
+            if char in vals:
+                char2val[char].add(key)
+    for char in chars:
+        for key, vals in dictionary.items():
+            if char not in vals:
+                notchar2val[char].add(key)
+    return char2val, notchar2val
+solution = Solution()
+print(solution.quer2res(dictionary, query))
+
 class Solution:
     def addOperators(self, num: str, target: int) -> List[str]:
         N = len(num)

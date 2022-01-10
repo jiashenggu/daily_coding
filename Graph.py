@@ -1,3 +1,27 @@
+# 785. Is Graph Bipartite?
+
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        n = len(graph)
+        colors = n * [-1]
+        def dfs(graph, node, color):
+            if color[node] == -1:
+                color[node] = 1
+
+            for adjnode in graph[node]:
+                if color[adjnode] == -1:
+                    color[adjnode] = 1 - color[node]
+                    if not dfs(graph, adjnode, color):
+                        return False
+                elif color[adjnode] == color[node]:
+                    return False
+            return True
+
+        for i in range(n):
+            if colors[i] == -1:
+                if not dfs(graph, i, colors):
+                    return False
+        return True
 # 210. Course Schedule II
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
