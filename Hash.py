@@ -1,3 +1,20 @@
+# 299. Bulls and Cows
+class Solution:
+    def getHint(self, secret: str, guess: str) -> str:
+        h = defaultdict(int)
+        bulls = 0
+        cows = 0
+        for idx, s in enumerate(secret):
+            g = guess[idx]
+            if g == s:
+                bulls += 1
+            else:
+                cows += int(h[s] < 0) + int(h[g] > 0)
+                h[s] += 1
+                h[g] -= 1
+        return "{}A{}B".format(bulls, cows)
+
+
 # 1923. Longest Common Subpath
 class RabinKarp:
     def __init__(self, s):
