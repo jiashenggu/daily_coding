@@ -1,3 +1,39 @@
+# 1868. Product of Two Run-Length Encoded Arrays
+class Solution:
+    def findRLEArray(self, encoded1: List[List[int]], encoded2: List[List[int]]) -> List[List[int]]:
+        n1 = len(encoded1)
+        n2 = len(encoded2)
+        i1 = 0
+        i2 = 0
+        ans = []
+        while i1 < n1 and i2 < n2:
+            num1 = encoded1[i1][0]
+            num2 = encoded2[i2][0]
+            v = num1 * num2
+            cnt1 = encoded1[i1][1]
+            cnt2 = encoded2[i2][1]
+            f = 0
+            if cnt1 < cnt2:
+                f = cnt1
+                encoded2[i2][1] -= cnt1
+                i1 += 1
+            elif cnt1 > cnt2:
+                f = cnt2
+                encoded1[i1][1] -= cnt2
+                i2 += 1
+            else:
+                f = cnt1
+                encoded1[i1][1] -= cnt2
+                encoded2[i2][1] -= cnt1
+                i1 += 1
+                i2 += 1
+            if ans and ans[-1][0] == v:
+                ans[-1][1] += f
+            else:
+                ans.append([v, f])
+        return ans
+
+
 # 31. Next Permutation
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
