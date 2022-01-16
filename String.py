@@ -1,3 +1,51 @@
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def expandCenter(l, r):
+            while l>=0 and r<len(s) and s[l]==s[r]:
+                l-=1
+                r+=1
+            return (r-l)-1
+        if not s:
+            return ""
+        start, end = 0, 0
+        for i in range(len(s)):
+            l1 = expandCenter(i, i)
+            l2 = expandCenter(i, i+1)
+            l = max(l1, l2)
+            if l>end-start:
+                # deal with odd and even simultaneously
+                start = i - (l-1)//2
+                end = i + l//2
+        return s[start:end+1]
+# manacher
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def expandCenter(l, r):
+            while l>=0 and r<len(s) and s[l]==s[r]:
+                l-=1
+                r+=1
+            return (r-l)//2 - 1
+        s = "*" + "*".join(list(s)) + "*"
+        start, end = 0, -1
+        arr_len = []
+        right = -1
+        j = -1
+        for i in range(len(s)):
+            if right>=i:
+                i_sym = 2*j - i
+                pre_len = min(arr_len[i_sym], right-i)
+                cur_len = expandCenter(i-pre_len, i+pre_len)
+            else:
+                cur_len = expandCenter(i, i)
+            arr_len.append(cur_len)
+            if i+cur_len>right:
+                j = i
+                right = i+cur_len
+            if 2*cur_len+1>end-start:
+                end = i+cur_len
+                start = i-cur_len
+
+        return s[start+1: end+1: 2]
 # 227. Basic Calculator II
 class Solution:
     def calculate(self, s: str) -> int:

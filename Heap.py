@@ -1,3 +1,18 @@
+# 253. Meeting Rooms II
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        if not intervals:
+            return 0
+        intervals.sort(key=lambda x: x[0])
+        freeroom = []
+        for interval in intervals:
+            s, e = interval
+            if freeroom and freeroom[0] <= s:
+                heapq.heappop(freeroom)
+            heapq.heappush(freeroom, e)
+        return len(freeroom)
+
+
 # 352. Data Stream as Disjoint Intervals
 class SummaryRanges(object):
 
@@ -106,18 +121,6 @@ class Solution:
         return ans
 
 
-# 253. Meeting Rooms II
-class Solution:
-    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
-        if not intervals:
-            return 0
-        h = []
-        intervals.sort(key = lambda x: x[0])
-        for i, (s, e) in enumerate(intervals):
-            if h and h[0]<=s:
-                heapq.heappop(h)
-            heapq.heappush(h, e)
-        return len(h)
 
 
 
