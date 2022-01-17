@@ -1,3 +1,30 @@
+# 722. Remove Comments
+class Solution:
+    def removeComments(self, source: List[str]) -> List[str]:
+        s = ""
+        block = False
+        ans = []
+        for line in source:
+            i = 0
+            n = len(line)
+            while i < n:
+                if line[i] == '/' and i + 1 < n and line[i + 1] == '/' and not block:
+                    i = len(line)
+                elif line[i] == '/' and i + 1 < n and line[i + 1] == '*' and not block:
+                    block = True
+                    i += 1
+                elif line[i] == '*' and i + 1 < n and line[i + 1] == '/' and block:
+                    block = False
+                    i += 1
+                elif not block:
+                    s += line[i]
+                i += 1
+            if s and not block:
+                ans.append(s)
+                s = ""
+        return ans
+
+
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         def expandCenter(l, r):

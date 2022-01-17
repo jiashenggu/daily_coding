@@ -1,3 +1,64 @@
+# 37. Sudoku Solver
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        self.solved = False
+
+        def box_index(row, col):
+            return row // 3 * 3 + col // 3
+
+        def could_place(d, row, col):
+            return not (d in rows[row] or d in cols[col] or d in boxes[box_index(row, col)])
+
+        def place_number(d, row, col):
+            rows[row][d] += 1
+            cols[col][d] += 1
+            boxes[box_index(row, col)][d] += 1
+            board[row][col] = str(d)
+
+        def remove_number(d, row, col):
+            del rows[row][d]
+            del cols[col][d]
+            del boxes[box_index(row, col)][d]
+            board[row][col] = '.'
+
+        def backtrack(row, col):
+            if board[row][col] == '.':
+                for d in range(1, 10):
+                    if could_place(d, row, col):
+                        place_number(d, row, col)
+                        if row == 8 and col == 8:
+                            self.solved = True
+                        else:
+                            if col == 8:
+                                backtrack(row + 1, 0)
+                            else:
+                                backtrack(row, col + 1)
+                        if not self.solved:
+                            remove_number(d, row, col)
+            else:
+                if row == 8 and col == 8:
+                    self.solved = True
+                else:
+                    if col == 8:
+                        backtrack(row + 1, 0)
+                    else:
+                        backtrack(row, col + 1)
+
+        rows = [collections.defaultdict(int) for _ in range(9)]
+        cols = [collections.defaultdict(int) for _ in range(9)]
+        boxes = [collections.defaultdict(int) for _ in range(9)]
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    d = int(board[i][j])
+                    place_number(d, i, j)
+        backtrack(0, 0)
+        return self.solved
+
+
 # 140. Word Break II
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:

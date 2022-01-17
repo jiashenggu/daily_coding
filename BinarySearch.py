@@ -1,3 +1,46 @@
+# 1428. Leftmost Column with at Least a One
+# """
+# This is BinaryMatrix's API interface.
+# You should not implement it, or speculate about its implementation
+# """
+# class BinaryMatrix(object):
+#    def get(self, row: int, col: int) -> int:
+#    def dimensions(self) -> list[]:
+
+class Solution:
+    def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
+        rows, cols = binaryMatrix.dimensions()
+
+        cur_row = 0
+        cur_col = cols - 1
+        while cur_row < rows and cur_col >= 0:
+            if binaryMatrix.get(cur_row, cur_col) == 1:
+                cur_col -= 1
+            else:
+                cur_row += 1
+        return cur_col + 1 if cur_col != cols - 1 else -1
+class Solution:
+    def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
+        rows, cols = binaryMatrix.dimensions()
+        smallest_index = cols
+        for row in range(rows):
+            # Binary Search for the first 1 in the row.
+            lo = 0
+            hi = cols - 1
+            while lo < hi:
+                mid = (lo + hi) // 2
+                if binaryMatrix.get(row, mid) == 0:
+                    lo = mid + 1
+                else:
+                    hi = mid
+            # If the last element in the search space is a 1, then this row
+            # contained a 1.
+            if binaryMatrix.get(row, lo) == 1:
+                smallest_index = min(smallest_index, lo)
+        # If smallest_index is still set to cols, then there were no 1's in
+        # the grid.
+        return -1 if smallest_index == cols else smallest_index
+
 # 4. Median of Two Sorted Arrays
 class Solution:
     def findMedianSortedArrays(self, A: List[int], B: List[int]) -> float:

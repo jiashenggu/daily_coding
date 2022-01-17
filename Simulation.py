@@ -1,3 +1,41 @@
+# 353. Design Snake Game
+class SnakeGame:
+
+    def __init__(self, width: int, height: int, food: List[List[int]]):
+        self.width = width
+        self.height = height
+        self.food = food
+
+        self.snake = [(0, 0)]
+
+    def move(self, direction: str) -> int:
+        nr, nc = self.snake[-1]
+        if direction == 'L':
+            nc -= 1
+        elif direction == 'R':
+            nc += 1
+        elif direction == 'U':
+            nr -= 1
+        elif direction == 'D':
+            nr += 1
+        if not (0<=nr<self.height and 0<=nc<self.width):
+            return -1
+
+        if not self.food or [nr, nc] != self.food[0]:
+            self.snake.pop(0)
+        else:
+            self.food.pop(0)
+        if (nr, nc) in self.snake:
+            return -1
+
+        self.snake.append((nr, nc))
+
+        return len(self.snake)-1
+
+
+# Your SnakeGame object will be instantiated and called as such:
+# obj = SnakeGame(width, height, food)
+# param_1 = obj.move(direction)
 # 498. Diagonal Traverse
 class Solution:
     def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
