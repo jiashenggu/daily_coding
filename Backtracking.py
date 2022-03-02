@@ -1,3 +1,60 @@
+# 131. Palindrome Partitioning
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        self.ans = []
+        n = len(s)
+
+        def check(s):
+            if not s:
+                return False
+            l, r = 0, len(s) - 1
+            while l < r:
+                if s[l] != s[r]:
+                    return False
+                l += 1
+                r -= 1
+            return True
+
+        def backtrack(idx, string, tmp):
+            # print(idx, string, tmp)
+            if n == idx:
+                if check(string):
+                    tmp.append(string)
+                    self.ans.append(tmp[:])
+                    tmp.pop()
+                return
+            backtrack(idx + 1, string + s[idx], tmp)
+            if check(string):
+                tmp.append(string)
+                backtrack(idx + 1, s[idx], tmp)
+                tmp.pop()
+
+        backtrack(0, "", [])
+        return self.ans
+
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        self.ans = []
+        n = len(s)
+        dp = [n * [False] for _ in range(n)]
+
+        def backtrack(idx, tmp):
+            # print(idx, string, tmp)
+            if n == idx:
+                self.ans.append(tmp[:])
+                return
+            for end in range(idx, n):
+                if s[idx] == s[end] and (end - idx <= 2 or dp[idx + 1][end - 1]):
+                    dp[idx][end] = True
+                    tmp.append(s[idx: end + 1])
+                    backtrack(end + 1, tmp)
+                    tmp.pop()
+
+        backtrack(0, [])
+        return self.ans
+
+
 # 37. Sudoku Solver
 class Solution:
     def solveSudoku(self, board: List[List[str]]) -> None:

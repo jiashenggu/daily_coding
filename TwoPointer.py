@@ -1,3 +1,17 @@
+# 283. Move Zeroes
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+
+        pre = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[i], nums[pre] = nums[pre], nums[i]
+                pre += 1
+
+
 # 15. 3Sum
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
