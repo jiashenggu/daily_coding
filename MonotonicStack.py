@@ -1,3 +1,21 @@
+# 402. Remove K Digits
+class Solution:
+    def removeKdigits(self, num: str, k: int) -> str:
+        stk = []
+
+        for digit in num:
+            while stk and k and stk[-1] > digit:
+                stk.pop()
+                k -= 1
+            stk.append(digit)
+        if k:
+            finalstk = stk[:-k]
+        else:
+            finalstk = stk
+
+        return "".join(finalstk).lstrip('0') or '0'
+
+
 # 918. Maximum Sum Circular Subarray
 class Solution:
     def maxSubarraySumCircular(self, nums: List[int]) -> int:

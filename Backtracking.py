@@ -1,3 +1,68 @@
+# 52. N-Queens II
+class Solution:
+    def totalNQueens(self, n: int) -> int:
+
+        def backtrack(row, diags, anti_diags, cols):
+            if row == n:
+                return 1
+            ans = 0
+            for col in range(n):
+                curr_diag = row - col
+                curr_anti_diag = row + col
+                if col in cols or curr_diag in diags or curr_anti_diag in anti_diags:
+                    continue
+                diags.add(curr_diag)
+                anti_diags.add(curr_anti_diag)
+                cols.add(col)
+
+                ans += backtrack(row + 1, diags, anti_diags, cols)
+
+                diags.remove(curr_diag)
+                anti_diags.remove(curr_anti_diag)
+                cols.remove(col)
+            return ans
+
+        return backtrack(0, set(), set(), set())
+
+
+# 51. N-Queens
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        def create_board(state):
+            board = []
+            for row in state:
+                board.append("".join(row))
+            return board
+
+        def backtrack(row, diagonals, anti_diagonals, cols, state):
+            if row == n:
+                ans.append(create_board(state))
+                return
+
+            for col in range(n):
+                curr_diagonal = row - col
+                curr_anti_diagonal = row + col
+                if (col in cols
+                        or curr_diagonal in diagonals
+                        or curr_anti_diagonal in anti_diagonals):
+                    continue
+
+                cols.add(col)
+                diagonals.add(curr_diagonal)
+                anti_diagonals.add(curr_anti_diagonal)
+                state[row][col] = 'Q'
+
+                backtrack(row + 1, diagonals, anti_diagonals, cols, state)
+
+                cols.remove(col)
+                diagonals.remove(curr_diagonal)
+                anti_diagonals.remove(curr_anti_diagonal)
+                state[row][col] = '.'
+
+        ans = []
+        empty_board = [['.'] * n for _ in range(n)]
+        backtrack(0, set(), set(), set(), empty_board)
+        return ans
 # 131. Palindrome Partitioning
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
