@@ -1,3 +1,30 @@
+# 88. Merge Sorted Array
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        p = m + n
+        m -= 1
+        n -= 1
+        while p > 0:
+            p -= 1
+            if m < 0:
+                nums1[p] = nums2[n]
+                n -= 1
+            elif n < 0:
+                nums1[p] = nums1[m]
+                m -= 1
+            elif nums1[m] < nums2[n]:
+                nums1[p] = nums2[n]
+                n -= 1
+            else:
+                nums1[p] = nums1[m]
+                m -= 1
+
+            # print(nums1, m, n)
+
+
 # 283. Move Zeroes
 class Solution:
     def moveZeroes(self, nums: List[int]) -> None:
