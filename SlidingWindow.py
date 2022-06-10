@@ -1,3 +1,17 @@
+# 3. Longest Substring Without Repeating Characters
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        i = 0
+        ans = 0
+        m = {}
+        for j in range(len(s)):
+            if s[j] in m:
+                i = max(i, m[s[j]])
+            m[s[j]] = j + 1
+            ans = max(ans, j - i + 1)
+        return ans
+
+
 # 76. Minimum Window Substring
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
