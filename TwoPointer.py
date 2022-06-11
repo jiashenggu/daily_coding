@@ -1,3 +1,41 @@
+# 1658. Minimum Operations to Reduce X to Zero
+class Solution:
+    def minOperations(self, nums: List[int], x: int) -> int:
+        total = sum(nums)
+        n = len(nums)
+        maxi = -1
+        left = 0
+        current = 0
+        for right in range(n):
+            current += nums[right]
+
+            while current > total - x and left <= right:
+                current -= nums[left]
+                left += 1
+            if current == total - x:
+                maxi = max(maxi, right - left + 1)
+        return n - maxi if maxi != -1 else -1
+
+class Solution:
+    def minOperations(self, nums: List[int], x: int) -> int:
+        current = sum(nums)
+        n = len(nums)
+        mini = inf
+        left = 0
+
+        for right in range(n):
+            # sum([0,..,left) + (right,...,n-1]) = x
+            current -= nums[right]
+            # if smaller, move `left` to left
+            while current < x and left <= right:
+                current += nums[left]
+                left += 1
+            # check if equal
+            if current == x:
+                mini = min(mini, (n-1-right)+left)
+
+        return mini if mini != inf else -1
+
 # 88. Merge Sorted Array
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
