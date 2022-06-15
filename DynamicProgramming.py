@@ -1,3 +1,32 @@
+# 1048. Longest String Chain
+class Solution:
+    def longestStrChain(self, words: List[str]) -> int:
+        m = collections.defaultdict(int)
+        words.sort(key=lambda x: len(x))
+
+        for word in words:
+            for i in range(len(word)):
+                _word = word[:i] + word[i + 1:]
+                m[word] = max(m[word], m[_word] + 1)
+        return max(m.values())
+
+
+# 583. Delete Operation for Two Strings
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        m, n = len(word1) + 1, len(word2) + 1
+        dp = [n * [0] for _ in range(m)]
+
+        for i in range(m):
+            for j in range(n):
+                if i == 0 or j == 0:
+                    continue
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1], dp[i][j])
+                if word1[i - 1] == word2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+        return len(word1) + len(word2) - 2 * max(map(max, dp))
+
+
 # 132. Palindrome Partitioning II
 class Solution:
     def minCut(self, s: str) -> int:

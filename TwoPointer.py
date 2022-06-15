@@ -1,3 +1,19 @@
+# 11. Container With Most Water
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height) - 1
+        maxarea = 0
+
+        while l < r:
+            width = r - l
+            maxarea = max(maxarea, min(height[l], height[r]) * width)
+            if height[l] <= height[r]:
+                l += 1
+            else:
+                r -= 1
+        return maxarea
+
+
 # 1658. Minimum Operations to Reduce X to Zero
 class Solution:
     def minOperations(self, nums: List[int], x: int) -> int:

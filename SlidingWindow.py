@@ -1,3 +1,24 @@
+# 1695. Maximum Erasure Value
+class Solution:
+    def maximumUniqueSubarray(self, nums: List[int]) -> int:
+        l = 0
+        vis = set()
+        n = len(nums)
+        if n==1:
+            return nums[0]
+        ans = -1
+        cur = 0
+        for r in range(n):
+            while l<n and nums[r] in vis:
+                vis.remove(nums[l])
+                cur -= nums[l]
+                l+=1
+            vis.add(nums[r])
+            cur += nums[r]
+            ans = max(ans, cur)
+        # print(accu)
+        return ans if ans!=-1 else n
+
 # 3. Longest Substring Without Repeating Characters
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
