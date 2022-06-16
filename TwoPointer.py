@@ -1,3 +1,34 @@
+# 5. Longest Palindromic Substring
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def helper(l, r):
+            while l >= 0 and r < n and s[l] == s[r]:
+                l -= 1
+                r += 1
+            return l + 1, r - 1
+
+        n = len(s)
+        tmp = 0
+        start = 0
+        end = 0
+        for i in range(n):
+            l1, r1 = helper(i, i)
+
+            if r1 - l1 + 1 > tmp:
+                tmp = r1 - l1 + 1
+                start = l1
+                end = r1
+            if i + 1 < n:
+                l2, r2 = helper(i, i + 1)
+                if r2 - l2 + 1 > tmp:
+                    tmp = r2 - l2 + 1
+                    start = l2
+                    end = r2
+            # print(s[start: end + 1])
+
+        return s[start: end + 1]
+
+
 # 11. Container With Most Water
 class Solution:
     def maxArea(self, height: List[int]) -> int:

@@ -1,3 +1,52 @@
+# 44. Wildcard Matching
+class Solution:
+    @lru_cache(None)
+    def isMatch(self, s: str, p: str) -> bool:
+        def remove_duplicate_stars(p: str) -> str:
+            new_string = []
+            for char in p:
+                if not new_string or char != '*':
+                    new_string.append(char)
+                elif new_string[-1] != '*':
+                    new_string.append(char)
+            return ''.join(new_string)
+
+        p = remove_duplicate_stars(p)
+        m, n = len(s), len(p)
+        i = m - 1
+        j = n - 1
+        while i >= 0 and j >= 0:
+            if p[j] == '?' or s[i] == p[j]:
+                i -= 1
+                j -= 1
+            elif p[j] == '*':
+                break
+            else:
+                return False
+        i = 0
+        j = 0
+        if m == 0:
+            for pp in p:
+                if pp != '*':
+                    return False
+            return True
+
+        while i < m and j < n:
+            if p[j] == '?' or s[i] == p[j]:
+                i += 1
+                j += 1
+            elif p[j] == '*':
+                for k in range(i, m):
+                    if j == n - 1 or self.isMatch(s[k:], p[j + 1:]):
+                        return True
+                return False
+            elif s[i] != p[j]:
+                return False
+        while j < n and p[j] == '*':
+            j += 1
+        return i == m and j == n
+
+
 def makesquare(self, nums):
     """
     :type nums: List[int]
