@@ -1,3 +1,27 @@
+# 135. Candy
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+
+        n = len(ratings)
+        candy = [1] * n
+        ans = n
+        for i in range(n - 1):
+            if ratings[i] < ratings[i + 1]:
+                if candy[i] >= candy[i + 1]:
+                    tmp = candy[i] - candy[i + 1] + 1
+                    candy[i + 1] += tmp
+                    ans += tmp
+        for i in reversed(range(n - 1)):
+            if ratings[i] > ratings[i + 1]:
+                if candy[i] <= candy[i + 1]:
+                    tmp = candy[i + 1] - candy[i] + 1
+                    candy[i] += tmp
+                    ans += tmp
+
+        # print(candy)
+        return ans
+
+
 # 134. Gas Station
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
