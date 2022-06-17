@@ -1,3 +1,26 @@
+# 968. Binary Tree Cameras
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def minCameraCover(self, root: Optional[TreeNode]) -> int:
+        covered = {None}
+        self.ans = 0
+
+        def dfs(node, pre):
+            if node:
+                dfs(node.left, node)
+                dfs(node.right, node)
+
+                if pre == None and node not in covered or node.left not in covered or node.right not in covered:
+                    self.ans += 1
+                    covered.update({node, pre, node.left, node.right})
+
+        dfs(root, None)
+        return self.ans
 # Tiktok
 # Input Dictionary:
 # 1: ['a', 'b', 'c']
