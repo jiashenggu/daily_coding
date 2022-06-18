@@ -1,3 +1,141 @@
+# 745. Prefix and Suffix Search
+class WordFilter:
+
+    def __init__(self, words: List[str]):
+        vis = set()
+        self.trie1 = {}
+        n = len(words)
+        for index, word in enumerate(reversed(words)):
+            i = n - 1 - index
+            if word in vis:
+                continue
+            vis.add(word)
+            t1 = self.trie1
+            for ch in word:
+                if ch not in t1:
+                    t1[ch] = {}
+                t1 = t1[ch]
+                if '@' not in t1:
+                    t1['@'] = set()
+                t1['@'].add(i)
+
+        self.trie2 = {}
+
+        vis = set()
+        for index, word in enumerate(reversed(words)):
+            i = n - 1 - index
+            if word in vis:
+                continue
+            vis.add(word)
+            t2 = self.trie2
+            for ch in reversed(word):
+                if ch not in t2:
+                    t2[ch] = {}
+                t2 = t2[ch]
+                if '@' not in t2:
+                    t2['@'] = set()
+                t2['@'].add(i)
+
+    def f(self, prefix: str, suffix: str) -> int:
+
+        t1 = self.trie1
+        flag = True
+        for ch in prefix:
+            if ch not in t1:
+                flag = False
+                break
+            t1 = t1[ch]
+        if flag:
+            s1 = t1['@']
+        else:
+            return -1
+        t2 = self.trie2
+        flag = True
+        for ch in reversed(suffix):
+            if ch not in t2:
+                flag = False
+                break
+            t2 = t2[ch]
+        if flag:
+            s2 = t2['@']
+        else:
+            return -1
+        # print(s1, s2)
+        s = s1 & s2
+        # print(len(s))
+        if len(s) == 0:
+            return -1
+        return sorted(s1 & s2)[-1]
+
+
+# Your WordFilter object will be instantiated and called as such:
+# obj = WordFilter(words)
+# param_1 = obj.f(prefix,suffix)
+
+from itertools import zip_longest
+Trie = lambda: collections.defaultdict(Trie)
+WEIGHT = False
+
+class WordFilter(object):
+    def __init__(self, words):
+        self.trie = Trie()
+
+        for weight, word in enumerate(words):
+            cur = self.trie
+            cur[WEIGHT] = weight
+            for i, x in enumerate(word):
+                #Put all prefixes and suffixes
+                tmp = cur
+                for letter in word[i:]:
+                    tmp = tmp[letter, None]
+                    tmp[WEIGHT] = weight
+
+                tmp = cur
+                for letter in word[:-i][::-1]:
+                    tmp = tmp[None, letter]
+                    tmp[WEIGHT] = weight
+
+                #Advance letters
+                cur = cur[x, word[~i]]
+                cur[WEIGHT] = weight
+
+    def f(self, prefix, suffix):
+        cur = self.trie
+        for a, b in zip_longest(prefix, suffix[::-1]):
+            if (a, b) not in cur: return -1
+            cur = cur[a, b]
+        return cur[WEIGHT]
+
+
+Trie = lambda: collections.defaultdict(Trie)
+from itertools import zip_longest
+
+
+class WordFilter:
+    def __init__(self, words: List[str]):
+        self.trie = Trie()
+
+        for weight, word in enumerate(words):
+            word += '#'
+            for i in range(len(word)):
+                cur = self.trie
+                cur['@'] = weight
+                for j in range(i, 2 * len(word) - 1):
+                    cur = cur[word[j % len(word)]]
+                    cur['@'] = weight
+
+    def f(self, prefix: str, suffix: str) -> int:
+        cur = self.trie
+        for letter in suffix + '#' + prefix:
+            if letter not in cur:
+                return -1
+            cur = cur[letter]
+        return cur['@']
+
+
+# Your WordFilter object will be instantiated and called as such:
+# obj = WordFilter(words)
+# param_1 = obj.f(prefix,suffix)
 # 527. Word Abbreviation
 
 class Solution:
