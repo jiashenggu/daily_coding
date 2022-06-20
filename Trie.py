@@ -1,3 +1,56 @@
+# 820. Short Encoding of Words
+Trie = lambda: collections.defaultdict(Trie)
+
+
+class Solution:
+    def minimumLengthEncoding(self, words: List[str]) -> int:
+        trie = Trie()
+        for word in words:
+            t = trie
+            for ch in reversed(word):
+                t['@'] = False
+                t = t[ch]
+            t['@'] = True
+
+        def dfs(t, index):
+            tmp = 0
+            for ch in t:
+                if ch == '@':
+                    continue
+                ret = dfs(t[ch], index + 1)
+                tmp += ret
+            if tmp != 0:
+                return tmp
+            if t['@']:
+                return index + 1
+            return 0
+
+        return dfs(trie, 0)
+
+
+# 1268. Search Suggestions System
+Trie = lambda: collections.defaultdict(Trie)
+class Solution:
+    def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
+        trie = Trie()
+        for word in products:
+            t = trie
+            for ch in word:
+                t = t[ch]
+                if '@' not in t:
+                    t['@'] = []
+                heapq.heappush(t['@'], word)
+        t = trie
+        ans = []
+        for ch in searchWord:
+            t = t[ch]
+            tmp = []
+            k = 3
+            while k>0 and len(t['@']) != 0:
+                k-=1
+                tmp.append(heapq.heappop(t['@']))
+            ans.append(tmp)
+        return ans
 # 745. Prefix and Suffix Search
 class WordFilter:
 
