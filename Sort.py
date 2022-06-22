@@ -1,6 +1,30 @@
+# 215. Kth Largest Element in an Array
+class Solution:
+    def partition(self, nums, l, r):
+        pivot = random.randint(l, r)
+        nums[pivot], nums[r] = nums[r], nums[pivot]
+        i = l
+        for j in range(l, r):
+            if nums[j] >= nums[r]:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+        nums[i], nums[r] = nums[r], nums[i]
+        return i
+
+    def quick(self, nums, l, r, k):
+        pos = self.partition(nums, l, r)
+        rank = pos - l + 1
+        if rank < k:
+            self.quick(nums, pos + 1, r, k - rank)
+        elif rank > k:
+            self.quick(nums, l, pos - 1, k)
+
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        self.quick(nums, 0, len(nums) - 1, k)
+        return nums[k - 1]
+
+
 # 953. Verifying an Alien Dictionary
-
-
 class Solution:
     def isAlienSorted(self, words: List[str], order: str) -> bool:
         orderMap = {}

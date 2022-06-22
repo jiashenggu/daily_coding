@@ -1,3 +1,27 @@
+# 1229. Meeting Scheduler
+class Solution:
+    def minAvailableDuration(self, slots1: List[List[int]], slots2: List[List[int]], duration: int) -> List[int]:
+        a1, a2 = 0, 0
+        n1, n2 = len(slots1), len(slots2)
+        slots1.sort()
+        slots2.sort()
+        while a1<n1 and a2<n2:
+            maxx = max(slots1[a1][0], slots2[a2][0])
+            miny = min(slots1[a1][1], slots2[a2][1])
+            if maxx>miny:
+                if slots1[a1][1]<slots2[a2][0]:
+                    a1+=1
+                elif slots2[a2][1] < slots1[a1][0]:
+                    a2+=1
+            else:
+                if miny-maxx>=duration:
+                    # print(maxx, miny)
+                    return [maxx, maxx+duration]
+                if slots1[a1][1]<slots2[a2][1]:
+                    a1+=1
+                elif slots2[a2][1] < slots1[a1][1]:
+                    a2+=1
+        return []
 # 5. Longest Palindromic Substring
 class Solution:
     def longestPalindrome(self, s: str) -> str:
