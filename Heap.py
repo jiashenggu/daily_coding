@@ -1,3 +1,48 @@
+# 1354. Construct Target Array With Multiple Sums
+def isPossible(self, target: List[int]) -> bool:
+    # Handle the n = 1 case.
+    if len(target) == 1:
+        return target == [1]
+
+    total_sum = sum(target)
+
+    target = [-num for num in target]
+    heapq.heapify(target)
+    while -target[0] > 1:
+        largest = -target[0]
+        rest = total_sum - largest
+
+        # This will only occur if n = 2.
+        if rest == 1:
+            return True
+
+        x = largest % rest
+
+        # If x is now 0 (invalid) or didn't
+        # change, then we know this is impossible.
+        if x == 0 or x == largest:
+            return False
+        heapq.heapreplace(target, -x)
+        total_sum = total_sum - largest + x
+
+    return True
+# 630. Course Schedule III
+class Solution:
+    def scheduleCourse(self, courses: List[List[int]]) -> int:
+        courses.sort(key=lambda x: x[1])
+        time, count = 0, 0
+        n = len(courses)
+        q = []
+        for c in courses:
+            if time + c[0] <= c[1]:
+                heapq.heappush(q, -c[0])
+                time += c[0]
+            elif len(q) > 0 and -q[0] > c[0]:
+                time += c[0] - (-heapq.heappop(q))
+                heapq.heappush(q, -c[0])
+        return len(q)
+
+
 # 1229. Meeting Scheduler
 class Solution:
     def minAvailableDuration(self, slots1: List[List[int]], slots2: List[List[int]], duration: int) -> List[int]:
