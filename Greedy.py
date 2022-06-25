@@ -1,3 +1,22 @@
+# 665. Non-decreasing Array
+class Solution:
+    def checkPossibility(self, nums: List[int]) -> bool:
+        n = len(nums)
+        flag = False
+        for i in range(1, n):
+            if nums[i - 1] > nums[i]:
+                if flag:
+                    return False
+                if i == 1:
+                    nums[i - 1] = nums[i]
+                elif nums[i - 2] > nums[i]:
+                    nums[i] = nums[i - 1]
+                else:
+                    nums[i - 1] = nums[i]
+                flag = True
+        return True
+
+
 # 135. Candy
 class Solution:
     def candy(self, ratings: List[int]) -> int:
