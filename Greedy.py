@@ -1,3 +1,34 @@
+# 406. Queue Reconstruction by Height
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        people.sort(key = lambda x: (-x[0], x[1]))
+        output = []
+        for p in people:
+            output.insert(p[1],p)
+        return output
+
+# 1647. Minimum Deletions to Make Character Frequencies Unique
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        c = collections.Counter(s)
+        d = collections.defaultdict(list)
+        for k, v in c.items():
+            d[v].append(k)
+        ans = 0
+        for k in reversed(sorted(d.keys())):
+            v = d[k]
+            if k == 0 or len(v) == 1:
+                continue
+            while len(v) > 1:
+                vv = v.pop()
+                cnt = 1
+                while k - cnt > 0 and len(d[k - cnt]) > 0:
+                    cnt += 1
+                d[k - cnt].append(vv)
+                ans += cnt
+        return ans
+
+
 # 665. Non-decreasing Array
 class Solution:
     def checkPossibility(self, nums: List[int]) -> bool:

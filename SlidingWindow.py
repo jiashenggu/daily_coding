@@ -1,3 +1,27 @@
+# 1423. Maximum Points You Can Obtain from Cards
+class Solution:
+    def maxScore(self, cardPoints: List[int], k: int) -> int:
+        n = len(cardPoints)
+        if k >= n:
+            return sum(cardPoints)
+        cp = cardPoints * 2
+        # print(cp)
+        ans = 0
+        l = n - k
+        cnt = 0
+        tmp = 0
+        for r in range(n - k, n + k):
+            if cnt < k:
+                cnt += 1
+                tmp += cp[r]
+            else:
+                tmp = tmp - cp[l] + cp[r]
+                l += 1
+            ans = max(ans, tmp)
+            # print(ans, cp[l], cp[r])
+        return ans
+
+
 # 1695. Maximum Erasure Value
 class Solution:
     def maximumUniqueSubarray(self, nums: List[int]) -> int:
