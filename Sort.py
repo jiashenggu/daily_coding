@@ -1,3 +1,103 @@
+# 462. Minimum Moves to Equal Array Elements II
+class Solution:
+    def minMoves2(self, nums: List[int]) -> int:
+
+        n = len(nums)
+        if n == 1:
+            return 0
+        nums.sort()
+
+        def check(mid):
+            ret = 0
+            for num in nums:
+                ret += abs(num - mid)
+            return ret
+
+        return check(nums[n // 2])
+
+
+class Solution:
+    def partition(self, nums, l, r):
+        pivot = nums[r]
+        i = l
+        for j in range(l, r + 1):
+            if nums[j] < pivot:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+        nums[i], nums[r] = nums[r], nums[i]
+        return i
+
+    def select(self, nums, l, r, k):
+        if l == r:
+            return nums[l]
+        pivot_index = self.partition(nums, l, r)
+        if k == pivot_index:
+            return nums[k]
+        elif k < pivot_index:
+            return self.select(nums, l, pivot_index - 1, k)
+        else:
+            return self.select(nums, pivot_index + 1, r, k)
+
+    def minMoves2(self, nums: List[int]) -> int:
+        s = 0
+        median = self.select(nums, 0, len(nums) - 1, len(nums) // 2)
+
+        for num in nums:
+            s += abs(median - num)
+        return s
+
+
+class Solution:
+    def partition(self, nums, l, r, val):
+        idx = l
+        while idx < r:
+            if nums[idx] == val:
+                break
+            idx += 1
+        nums[idx], nums[r] = nums[r], nums[idx]
+        pivot = nums[r]
+        i = l
+        for j in range(l, r + 1):
+            if nums[j] < pivot:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+        nums[i], nums[r] = nums[r], nums[i]
+        return i
+
+    def findMedian(self, nums, l, n):
+        nums[l:l + n] = sorted(nums[l: l + n])
+        return nums[l + n // 2]
+
+    def kthSmallest(self, nums, l, r, k):
+        if k > 0 and k <= r - l + 1:
+            n = r - l + 1
+            median = (n + 4) // 5 * [0]
+            i = 0
+            while i < n // 5:
+                median[i] = self.findMedian(nums, l + i * 5, 5)
+                i += 1
+            if i * 5 < n:
+                median[i] = self.findMedian(nums, l + i * 5, n % 5)
+                i += 1
+            medOfMed = median[i - 1] if i == 1 else self.kthSmallest(median, 0, i - 1, i // 2)
+
+            pos = self.partition(nums, l, r, medOfMed)
+            if pos - l == k - 1:
+                return nums[pos]
+            if pos - l > k - 1:
+                return self.kthSmallest(nums, l, pos - 1, k)
+            return self.kthSmallest(nums, pos + 1, r, k - pos + l - 1)
+        return float("inf")
+
+    def minMoves2(self, nums: List[int]) -> int:
+        s = 0
+        median = self.kthSmallest(nums, 0, len(nums) - 1, len(nums) // 2 + 1)
+
+        for num in nums:
+            s += abs(median - num)
+        return s
+
+
 # 215. Kth Largest Element in an Array
 class Solution:
     def partition(self, nums, l, r):

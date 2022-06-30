@@ -1,3 +1,24 @@
+# 1564. Put Boxes Into the Warehouse I
+class Solution:
+    def maxBoxesInWarehouse(self, boxes: List[int], warehouse: List[int]) -> int:
+        n = len(warehouse)
+        m = len(boxes)
+        left = n * [0]
+        left[0] = warehouse[0]
+        for i in range(1, n):
+            left[i] = min(warehouse[i], left[i - 1])
+
+        boxes.sort()
+        ans = 0
+        for i in reversed(range(n)):
+            if not boxes:
+                break
+            if boxes[0] <= left[i]:
+                ans += 1
+                boxes.pop(0)
+        return ans
+
+
 # 406. Queue Reconstruction by Height
 class Solution:
     def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
