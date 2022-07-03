@@ -1,3 +1,19 @@
+# 376. Wiggle Subsequence
+class Solution:
+    def wiggleMaxLength(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n < 2:
+            return n
+        prevdiff = nums[1] - nums[0]
+        cnt = 2 if prevdiff else 1
+        for i in range(2, n):
+            diff = nums[i] - nums[i - 1]
+            if (diff > 0 and prevdiff <= 0) or (diff < 0 and prevdiff >= 0):
+                cnt += 1
+                prevdiff = diff
+        return cnt
+
+
 # 1564. Put Boxes Into the Warehouse I
 class Solution:
     def maxBoxesInWarehouse(self, boxes: List[int], warehouse: List[int]) -> int:
