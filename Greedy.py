@@ -109,6 +109,24 @@ class Solution:
         return ans
 
 
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        n = len(ratings)
+        l2r = n * [1]
+        r2l = n * [1]
+
+        for i in range(1, n):
+            if ratings[i - 1] < ratings[i]:
+                l2r[i] = l2r[i - 1] + 1
+        for i in reversed(range(1, n)):
+            if ratings[i - 1] > ratings[i]:
+                r2l[i - 1] = r2l[i] + 1
+        ans = 0
+        for i in range(n):
+            ans += max(l2r[i], r2l[i])
+        return ans
+
+
 # 134. Gas Station
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
