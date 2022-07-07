@@ -1,3 +1,43 @@
+# 97. Interleaving String
+class Solution:
+    @cache
+    def dfs(self, s1, i, s2, j, s3, k):
+        if i == len(s1):
+            return s2[j:] == s3[k:]
+        if j == len(s2):
+            return s1[i:] == s3[k:]
+        if ((s3[k] == s1[i] and self.dfs(s1, i + 1, s2, j, s3, k + 1)) or
+                (s3[k] == s2[j] and self.dfs(s1, i, s2, j + 1, s3, k + 1))):
+            return True
+        return False
+
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        n1, n2, n3 = len(s1), s2.__len__(), s3.__len__()
+        if n1 + n2 != n3:
+            return False
+        return self.dfs(s1, 0, s2, 0, s3, 0)
+
+
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        n1, n2, n3 = len(s1), s2.__len__(), s3.__len__()
+        if n1 + n2 != n3:
+            return False
+        dp = [(1 + n2) * [0] for _ in range(n1 + 1)]
+        for i in range(n1 + 1):
+            for j in range(n2 + 1):
+                if i == 0 and j == 0:
+                    dp[i][j] = True
+                elif i == 0:
+                    dp[i][j] = dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]
+                elif j == 0:
+                    dp[i][j] = dp[i - 1][j] and s1[i - 1] == s3[i + j - 1]
+                else:
+                    dp[i][j] = (dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]) or (
+                                dp[i - 1][j] and s1[i - 1] == s3[i + j - 1])
+        return dp[n1][n2]
+
+
 # 256. Paint House
 import copy
 
