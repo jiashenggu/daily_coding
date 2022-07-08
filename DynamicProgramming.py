@@ -1,3 +1,33 @@
+# 1473. Paint House III
+class Solution:
+    def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+        dp = [[(n) * [float("inf")] for _ in range(target + 1)] for __ in range(m)]
+
+        for color in range(1, n + 1):
+            if houses[0] == color:
+                dp[0][1][color - 1] = 0
+            elif not houses[0]:
+                dp[0][1][color - 1] = cost[0][color - 1]
+
+        for house in range(1, m):
+            for neighborhoods in range(1, 1 + min(target, house + 1)):
+                for color in range(1, n + 1):
+                    if houses[house] and houses[house] != color:
+                        continue
+                    currCost = float("inf")
+                    for prevColor in range(1, n + 1):
+                        if prevColor != color:
+                            currCost = min(currCost, dp[house - 1][neighborhoods - 1][prevColor - 1])
+                        else:
+                            currCost = min(currCost, dp[house - 1][neighborhoods][color - 1])
+                    costToPaint = 0 if houses[house] else cost[house][color - 1]
+                    dp[house][neighborhoods][color - 1] = currCost + costToPaint
+        print(dp)
+        ans = min(dp[m - 1][target])
+
+        return ans if ans != float("inf") else -1
+
+
 # 97. Interleaving String
 class Solution:
     @cache
