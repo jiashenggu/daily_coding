@@ -1,3 +1,28 @@
+# 510. Inorder Successor in BST II
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.parent = None
+"""
+
+
+class Solution:
+    def inorderSuccessor(self, node: 'Node') -> 'Optional[Node]':
+
+        if not node.right:
+            while node.parent and node.parent.right == node:
+                node = node.parent
+            return node.parent
+        node = node.right
+        while node.left:
+            node = node.left
+        return node
+
+
 # 987. Vertical Order Traversal of a Binary Tree
 class Solution:
     def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:
