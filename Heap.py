@@ -1,3 +1,20 @@
+# 1696. Jump Game VI
+class Solution:
+    def maxResult(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        score = nums[0]
+        dp = deque()
+        dp.append((0, score))
+        for i in range(1, n):
+            while dp and dp[0][0] < i - k:
+                dp.popleft()
+            score = dp[0][1] + nums[i]
+            while dp and dp[-1][1] <= score:
+                dp.pop()
+            dp.append((i, score))
+        return score
+
+
 # 1354. Construct Target Array With Multiple Sums
 def isPossible(self, target: List[int]) -> bool:
     # Handle the n = 1 case.
