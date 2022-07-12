@@ -1,3 +1,32 @@
+# 473. Matchsticks to Square
+class Solution:
+    def makesquare(self, matchsticks: List[int]) -> bool:
+        s = sum(matchsticks)
+        a, b, c, d = 0, 0, 0, 0
+        n = len(matchsticks)
+        if s // 4 * 4 != s:
+            return False
+        matchsticks.sort(reverse=True)
+
+        @cache
+        def dfs(a, b, c, d, idx):
+            if idx == n:
+                if a == b == c == d == s // 4:
+                    return True
+                return False
+            if a > s // 4 or b > s // 4 or c > s // 4 or d > s // 4:
+                return False
+
+            if dfs(a + matchsticks[idx], b, c, d, idx + 1):
+                return True
+            if dfs(a, b + matchsticks[idx], c, d, idx + 1):
+                return True
+            if dfs(a, b, c + matchsticks[idx], d, idx + 1):
+                return True
+            if dfs(a, b, c, d + matchsticks[idx], idx + 1):
+                return True
+
+        return dfs(a, b, c, d, 0)
 # 44. Wildcard Matching
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
