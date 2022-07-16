@@ -1,3 +1,38 @@
+# 576. Out of Boundary Paths
+class Solution:
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        dp = [n * [0] for _ in range(m)]
+        M = 10 ** 9 + 7
+        dp[startRow][startColumn] = 1
+        cnt = 0
+        for moves in range(1, maxMove + 1):
+            tmp = [n * [0] for _ in range(m)]
+            for i in range(m):
+                for j in range(n):
+                    if i == m - 1:
+                        cnt = (cnt + dp[i][j]) % M
+                    if i == 0:
+                        cnt = (cnt + dp[i][j]) % M
+                    if j == n - 1:
+                        cnt = (cnt + dp[i][j]) % M
+                    if j == 0:
+                        cnt = (cnt + dp[i][j]) % M
+                    if i > 0:
+                        tmp[i][j] += dp[i - 1][j]
+                        tmp[i][j] %= M
+                    if i < m - 1:
+                        tmp[i][j] += dp[i + 1][j]
+                        tmp[i][j] %= M
+                    if j > 0:
+                        tmp[i][j] += dp[i][j - 1]
+                        tmp[i][j] %= M
+                    if j < n - 1:
+                        tmp[i][j] += dp[i][j + 1]
+                        tmp[i][j] %= M
+            dp = tmp
+        return cnt
+
+
 # 1473. Paint House III
 class Solution:
     def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
