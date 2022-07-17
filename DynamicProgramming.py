@@ -1,3 +1,24 @@
+# 629. K Inverse Pairs Array
+class Solution:
+    def kInversePairs(self, n: int, k: int) -> int:
+        M = 10**9+7
+        dp = [[0]*(k+1) for _ in range(n+1)]
+        for i in range(1, n+1):
+            for j in range(k+1):
+                if j==0:
+                    dp[i][j] = 1
+                else:
+                    if j>=i:
+                        tmp = dp[i-1][j-i]
+                    else:
+                        tmp=0
+                    val = (dp[i-1][j] + M - tmp)%M
+                    dp[i][j] = (dp[i][j-1] + val)%M
+        if k>0:
+            tmp = dp[n][k-1]
+        else:
+            tmp=0
+        return (dp[n][k]+M-tmp)%M
 # 576. Out of Boundary Paths
 class Solution:
     def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
