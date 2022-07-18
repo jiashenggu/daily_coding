@@ -1,3 +1,85 @@
+# 37. Sudoku Solver
+class Solution:
+    def check(self, board, x, y):
+        val = board[x][y]
+        for i in range(9):
+            if i != x and board[i][y] == val:
+                return False
+        for i in range(9):
+            if i != y and board[x][i] == val:
+                return False
+        m, n = x // 3 * 3, y // 3 * 3
+        for i in range(3):
+            for j in range(3):
+                if (i + m != x or j + n != y) and board[i + m][j + n] == val:
+                    return False
+        return True
+
+    def dfs(self, board):
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == 0:
+                    for k in range(1, 10):
+                        board[i][j] = k
+                        if self.check(board, i, j) and self.dfs(board):
+                            return True
+                        board[i][j] = 0
+                    return False
+        return True
+
+
+while True:
+    try:
+        board = []
+        for i in range(9):
+            row = list(map(int, input().split()))
+            board.append(row)
+        s = Solution()
+        s.dfs(board)
+
+        for i in range(9):
+            board[i] = list(map(str, board[i]))
+            print(' '.join(board[i]))
+    except:
+        break
+# HJ28 素数伴侣
+from functools import lru_cache
+n = int(input())
+arr = [int(i) for i in input().split()]
+
+@lru_cache(None)
+def check(num1, num2):
+    num = num1+num2
+    i = 2
+    while i*i<=num:
+        while num%i == 0:
+            return False
+        i+=1
+    return True
+
+def find_pair(odd, vis, choose, evens):
+    for j, even in enumerate(evens):
+        if check(odd, even) and j not in vis:
+            vis.add(j)
+            if choose[j] == 0 or find_pair(choose[j], vis, choose, evens):
+                choose[j] = odd
+                return True
+    return False
+
+odds = []
+evens = []
+count = 0
+for i in arr:
+    if i%2==0:
+        odds.append(i)
+    else:
+        evens.append(i)
+choose = [0]*len(evens)
+for odd in odds:
+    vis = set()
+    if find_pair(odd, vis, choose, evens):
+        count += 1
+print(count)
 # 695. Max Area of Island
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:

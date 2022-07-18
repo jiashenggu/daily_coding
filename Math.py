@@ -1,3 +1,16 @@
+# linear sieve
+n = int(input())
+isnp = (n+1)*[0]
+primes = []
+for i in range(2, n+1):
+    if not isnp[i]:
+        primes.append(i)
+    for p in primes:
+        if p*i>n:
+            break
+        isnp[i*p] = 1
+        if i%p == 0:
+            break
 # 50. Pow(x, n)
 class Solution:
     def myPow(self, x: float, n: int) -> float:
