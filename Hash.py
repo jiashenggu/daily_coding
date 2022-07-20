@@ -1,3 +1,22 @@
+# 792. Number of Matching Subsequences
+class Solution:
+    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+        d = defaultdict(list)
+        for word in words:
+            d[word[0]].append(word)
+
+        for ch in s:
+            nd = len(d[ch])
+            for _ in range(nd):
+                word = d[ch].pop(0)
+                _word = word[1:]
+                if _word == "":
+                    continue
+                d[_word[0]].append(_word)
+        ans = 0
+        for k, v in d.items():
+            ans += len(v)
+        return len(words) - ans
 # 128. Longest Consecutive Sequence
 class Solution:
     def longestConsecutive(self, nums):
