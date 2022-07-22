@@ -1,3 +1,30 @@
+# 86. Partition List
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+        l1 = ListNode()
+        l2 = ListNode()
+        # l1.next = head
+        # l2.next = head
+        _l1 = l1
+        _l2 = l2
+        node = head
+        while node:
+            if node.val < x:
+                l1.next = ListNode(node.val)
+                l1 = l1.next
+            else:
+                l2.next = ListNode(node.val)
+                l2 = l2.next
+            node = node.next
+        l1.next = _l2.next
+        return _l1.next
+
+
 # 92. Reverse Linked List II
 # Definition for singly-linked list.
 # class ListNode:
