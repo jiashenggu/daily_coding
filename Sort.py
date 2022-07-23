@@ -1,3 +1,118 @@
+# 315. Count of Smaller Numbers After Self
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        # implement segment tree
+        def update(index, value, tree, size):
+            index += size  # shift the index to the leaf
+            # update from leaf to root
+            tree[index] += value
+            while index > 1:
+                index //= 2
+                tree[index] = tree[index * 2] + tree[index * 2 + 1]
+
+        def query(left, right, tree, size):
+            # return sum of [left, right)
+            result = 0
+            left += size  # shift the index to the leaf
+            right += size
+            while left < right:
+                # if left is a right node
+                # bring the value and move to parent's right node
+                if left % 2 == 1:
+                    result += tree[left]
+                    left += 1
+                # else directly move to parent
+                left //= 2
+                # if right is a right node
+                # bring the value of the left node and move to parent
+                if right % 2 == 1:
+                    right -= 1
+                    result += tree[right]
+                # else directly move to parent
+                right //= 2
+            return result
+
+        offset = 10**4  # offset negative to non-negative
+        size = 2 * 10**4 + 1  # total possible values in nums
+        tree = [0] * (2 * size)
+        result = []
+        for num in reversed(nums):
+            smaller_count = query(0, num + offset, tree, size)
+            result.append(smaller_count)
+            update(num + offset, 1, tree, size)
+        return reversed(result)
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        # implement Binary Index Tree
+        def update(index, value, tree, size):
+            index += 1  # index in BIT is 1 more than the original index
+            while index < size:
+                tree[index] += value
+                index += index & -index
+
+        def query(index, tree):
+            # return sum of [0, index)
+            result = 0
+            while index >= 1:
+                result += tree[index]
+                index -= index & -index
+            return result
+
+        offset = 10**4  # offset negative to non-negative
+        size = 2 * 10**4 + 2  # total possible values in nums plus one dummy
+        tree = [0] * size
+        result = []
+        for num in reversed(nums):
+            smaller_count = query(num + offset, tree)
+            result.append(smaller_count)
+            update(num + offset, 1, tree, size)
+        return reversed(result)
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        arr = [[v, i] for i, v in enumerate(nums)]  # record value and index
+        result = [0] * n
+
+        def merge_sort(arr, left, right):
+            # merge sort [left, right) from small to large, in place
+            if right - left <= 1:
+                return
+            mid = (left + right) // 2
+            merge_sort(arr, left, mid)
+            merge_sort(arr, mid, right)
+            merge(arr, left, right, mid)
+
+        def merge(arr, left, right, mid):
+            # merge [left, mid) and [mid, right)
+            i = left  # current index for the left array
+            j = mid  # current index for the right array
+            # use temp to temporarily store sorted array
+            temp = []
+            while i < mid and j < right:
+                if arr[i][0] <= arr[j][0]:
+                    # j - mid numbers jump to the left side of arr[i]
+                    result[arr[i][1]] += j - mid
+                    temp.append(arr[i])
+                    i += 1
+                else:
+                    temp.append(arr[j])
+                    j += 1
+            # when one of the subarrays is empty
+            while i < mid:
+                # j - mid numbers jump to the left side of arr[i]
+                result[arr[i][1]] += j - mid
+                temp.append(arr[i])
+                i += 1
+            while j < right:
+                temp.append(arr[j])
+                j += 1
+            # restore from temp
+            for i in range(left, right):
+                arr[i] = temp[i - left]
+
+        merge_sort(arr, 0, n)
+
+        return result
 # 1465. Maximum Area of a Piece of Cake After Horizontal and Vertical Cuts
 class Solution:
     def maxArea(self, h: int, w: int, horizontalCuts: List[int], verticalCuts: List[int]) -> int:
