@@ -1,3 +1,37 @@
+# 890. Find and Replace Pattern
+class Solution:
+    def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+        def change(s):
+            d = {}
+            ret = ''
+            index = 0
+            for ch in s:
+                if ch not in d:
+                    index += 1
+                    d[ch] = index
+                ret = ret + chr(ord('a') + d[ch])
+            # print(ret)
+            return ret
+
+        p = change(pattern)
+        ans = []
+        for word in words:
+            if change(word) == p:
+                ans.append(word)
+        return ans
+
+class Solution(object):
+    def findAndReplacePattern(self, words, pattern):
+        def match(word):
+            m1, m2 = {}, {}
+            for w, p in zip(word, pattern):
+                if w not in m1: m1[w] = p
+                if p not in m2: m2[p] = w
+                if (m1[w], m2[p]) != (p, w):
+                    return False
+            return True
+
+        return filter(match, words)
 # 792. Number of Matching Subsequences
 class Solution:
     def numMatchingSubseq(self, s: str, words: List[str]) -> int:
