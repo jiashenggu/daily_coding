@@ -1,3 +1,4 @@
+
 # 353. Design Snake Game
 class SnakeGame:
 
