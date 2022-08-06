@@ -1,3 +1,28 @@
+# 366. Find Leaves of Binary Tree
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
+        d = defaultdict(list)
+
+        def dfs(node):
+            nonlocal d
+            if not node.left and not node.right:
+                d[0].append(node.val)
+                return 0
+            height = 1 + max(dfs(node.left) if node.left else float("-inf"),
+                             dfs(node.right) if node.right else float("-inf"))
+            d[height].append(node.val)
+            return height
+
+        dfs(root)
+        return d.values()
+
+
 # 114. Flatten Binary Tree to Linked List
 # Definition for a binary tree node.
 # class TreeNode:

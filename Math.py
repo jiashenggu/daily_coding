@@ -1,3 +1,16 @@
+# 858. Mirror Reflection
+class Solution:
+    def mirrorReflection(self, p: int, q: int) -> int:
+        while p%2 == 0 and q%2 == 0:
+            p//=2
+            q//=2
+        return 1 - p%2 + q%2
+# 458. Poor Pigs
+class Solution:
+    def poorPigs(self, buckets: int, minutesToDie: int, minutesToTest: int) -> int:
+        l = log(buckets, minutesToTest // minutesToDie + 1)
+
+        return ceil(l)
 # 62. Unique Paths
 from math import factorial
 class Solution:
