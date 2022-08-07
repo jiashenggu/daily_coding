@@ -1,3 +1,17 @@
+# 2370. Longest Ideal Subsequence
+class Solution:
+    def longestIdealString(self, s: str, k: int) -> int:
+        x = [ord(i)-97 for i in s]
+        res = defaultdict(int)
+        for i in x:
+            cur = 0
+            for j in range(26):
+                if abs(i-j) <= k:
+                    cur = max(cur, res[j])
+            cur += 1
+            res[i] = max(res[i], cur)
+            print(res)
+        return max(res.values())
 # 377. Combination Sum IV
 class Solution:
     def combinationSum4(self, nums: List[int], target: int) -> int:
