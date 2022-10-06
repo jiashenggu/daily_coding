@@ -1,3 +1,22 @@
+# template
+# l, r = -1, N
+# while l+1!=r:
+#     m = (l+r)>>1
+#     if isblue(m):
+#         l=m
+#     else:
+#         r=m
+#     return l/r
+#          isblue return
+# first >=5  <5    r
+# last  <5   <5    l
+# first >5   <=5   r
+# last  <=5  <=5   l
+
+
+
+
+
 # 378. Kth Smallest Element in a Sorted Matrix
 class Solution:
 

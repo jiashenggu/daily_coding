@@ -1,3 +1,23 @@
+# 235. Lowest Common Ancestor of a Binary Search Tree
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        parent = root.val
+        pv = p.val
+        qv = q.val
+
+        if pv > parent and qv > parent:
+            return self.lowestCommonAncestor(root.right, p, q)
+        elif pv < parent and qv < parent:
+            return self.lowestCommonAncestor(root.left, p, q)
+        else:
+            return root
 # 366. Find Leaves of Binary Tree
 # Definition for a binary tree node.
 # class TreeNode:
