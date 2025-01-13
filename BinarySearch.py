@@ -8,10 +8,10 @@
 #         r=m
 #     return l/r
 #          isblue return
-# first >=5  <5    r
-# last  <5   <5    l
-# first >5   <=5   r
-# last  <=5  <=5   l
+# Find the first element >=5  <5    r
+# Find the last element  <5   <5    l
+# Find the first element >5   <=5   r
+# Find the last element  <=5  <=5   l
 
 
 
