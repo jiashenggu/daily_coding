@@ -7,11 +7,11 @@
 #     else:
 #         r=m
 #     return l/r
-#          isblue return
-# Find the first element >=5  <5    r
-# Find the last element  <5   <5    l
-# Find the first element >5   <=5   r
-# Find the last element  <=5  <=5   l
+#                            ｜isblue｜return
+# Find the first element >=5 ｜  <5  ｜  r
+# Find the last element  <5  ｜  <5  ｜  l
+# Find the first element >5  ｜  <=5 ｜  r
+# Find the last element  <=5 ｜  <=5 ｜  l
 
 
 
