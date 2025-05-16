@@ -42,6 +42,8 @@ def main():
         
         # 搜索关键词
         search_term = st.text_input("搜索关键词", "")
+
+        search_source = st.text_input("搜索来源", "")
         
         # 相似度分数筛选
         min_score = st.slider("最小相似度分数", 0.0, 1.0, 0.0)
@@ -65,6 +67,9 @@ def main():
         if isinstance(item, dict):
             # 搜索关键词筛选
             if search_term.lower() not in item.get("search_keyword", "").lower():
+                continue
+
+            if search_source.lower() not in item.get("source", "").lower():
                 continue
             
             # 相似度分数筛选
