@@ -16,6 +16,36 @@
 
 
 
+# encoding: utf-8
+# 有个石子，扔出去x米后，会弹floor(x/2)米或者结束，问：给定最后飞了n米，第一段的最小距离是多少？
+import math
+def shuipiao(n, freq):
+    print(n, freq)
+    l, r = 0, n+1
+    ans = n
+    while l+1!=r:
+        mid = (l+r)//2
+        s = 0
+        tmp_mid = mid
+        tmp_freq = freq
+        while tmp_freq:
+            s+=mid
+            mid = math.floor(mid/2)
+            tmp_freq -= 1
+        print(mid, l, r, s)
+        if s>=n:
+            r = tmp_mid
+        else:
+            l = tmp_mid
+        if s==n:
+            ans = r
+    return ans
+minans = float("inf")
+n = 7
+for i in range(1, 2+math.floor(math.log2(n))):
+    minans = min(minans, shuipiao(n, i))
+print(minans)
+
 
 # 378. Kth Smallest Element in a Sorted Matrix
 class Solution:
